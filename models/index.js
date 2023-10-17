@@ -1,3 +1,3 @@
-const { News } = require("./news");
+const { News } = require("./news.model");
 
 module.exports = { News };
