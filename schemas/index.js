@@ -1,3 +1,3 @@
-const { createNewsSchema, updateNewsSchema } = require("./news.joiSchema");
+const { createNewsSchema, updateNewsSchema, addNewsSchema } = require("./news.joiSchema");
 
-module.exports = { createNewsSchema, updateNewsSchema };
+module.exports = { createNewsSchema, updateNewsSchema, addNewsSchema };

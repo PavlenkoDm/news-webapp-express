@@ -1,7 +1,13 @@
+const { dbFailure } = require("../../helpers");
 const { News } = require("../../models");
 
 const getHasReadNews = async (req, res) => {
-  const data = await News.find({ hasRead: true }, "-createdAt -updatedAt");
+  const data = await News.find({ hasRead: true }, "-createdAt -updatedAt -_id");
+  if (!data) {
+    dbFailure();
+    return;
+  }
+
   res.status(200);
   res.json({
     code: 200,

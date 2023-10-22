@@ -4,6 +4,10 @@ const handleMongooseError = require("../middlewares/handleMongooseError");
 
 const newsSchema = new Schema(
   {
+    newsOwner: {
+      type: String,
+      default: "",
+    },
     isFavourite: {
       type: Boolean,
       default: false,
