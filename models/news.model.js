@@ -26,15 +26,15 @@ const newsSchema = new Schema(
     },
     description: {
       type: String,
-      required: [true, "Description is required"],
+      default: "",
     },
     edition: {
       type: String,
-      required: [true, "Edition is required"],
+      default: "",
     },
     author: {
       type: String,
-      required: [true, "Author is required"],
+      default: "",
     },
     category: {
       type: String,
@@ -42,7 +42,11 @@ const newsSchema = new Schema(
     },
     imgLink: {
       type: String,
-      required: [true, "Link to image is required"],
+      default: "",
+    },
+    imgAlt: {
+      type: String,
+      default: "",
     },
     newsUrl: {
       type: String,
