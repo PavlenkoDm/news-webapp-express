@@ -19,12 +19,12 @@ const addNewsSchema = Joi.array().items(
     hasRead: Joi.boolean(),
     title: Joi.string().required(),
     publishDate: Joi.string().required(),
-    description: Joi.string().default(""),
-    edition: Joi.string().default(""),
-    author: Joi.string().default(""),
+    description: Joi.string().allow(""),
+    edition: Joi.string().allow(""),
+    author: Joi.string().allow(""),
     category: Joi.string().required(),
-    imgLink: Joi.string().default(""),
-    imgAlt: Joi.string().default(""),
+    imgLink: Joi.string().allow(""),
+    imgAlt: Joi.string().allow(""),
     newsUrl: Joi.string().required(),
   })
 );
