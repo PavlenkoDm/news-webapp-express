@@ -2,10 +2,10 @@ const { httpError } = require("../helpers");
 
 const validateReqBody = schema => {
   const foo = (req, res, next) => {
-    // if (Object.keys(req.body).length === 0) {
-    //   next();
-    // }
-    if (req.body.length === 0) next();
+    if (req.body.length === 0) {
+      res.send("empty arr");
+      return;
+    }
     const { error } = schema.validate(req.body);
     if (error) {
       next(httpError(400, error.message));
