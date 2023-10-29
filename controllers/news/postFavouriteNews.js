@@ -2,6 +2,9 @@ const { dbFailure, modifyDBResponse } = require("../../helpers");
 const { News } = require("../../models");
 
 const postFavouriteNews = async (req, res) => {
+  if (req.body.length === 0) {
+    return;
+  }
   const result = await News.deleteMany({ isFavourite: true });
   if (!result) {
     dbFailure();
