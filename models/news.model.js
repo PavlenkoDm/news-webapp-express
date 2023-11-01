@@ -52,6 +52,10 @@ const newsSchema = new Schema(
       type: String,
       required: [true, "News url is required"],
     },
+    materialType: {
+      type: String,
+      default: "",
+    },
   },
   { versionKey: false, timestamps: true }
 );

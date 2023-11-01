@@ -26,6 +26,7 @@ const addNewsSchema = Joi.array().items(
     imgLink: Joi.string().allow(""),
     imgAlt: Joi.string().allow(""),
     newsUrl: Joi.string().required(),
+    materialType: Joi.string(),
   })
 );
 

@@ -6,7 +6,10 @@ const { DB_HOST, PORT } = process.env;
 mongoose.set("strictQuery", true);
 
 mongoose
-  .connect(DB_HOST)
+  .connect(DB_HOST, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
   .then(() => {
     app.listen(PORT, () => {
       console.log(`Server is running... Use API on port: ${PORT}`);
