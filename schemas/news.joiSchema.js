@@ -17,16 +17,16 @@ const addNewsSchema = Joi.array().items(
   Joi.object({
     isFavourite: Joi.boolean(),
     hasRead: Joi.boolean(),
-    title: Joi.string().required(),
+    title: Joi.string().allow(""),
     publishDate: Joi.string().required(),
     description: Joi.string().allow(""),
     edition: Joi.string().allow(""),
     author: Joi.string().allow(""),
-    category: Joi.string().required(),
+    category: Joi.string().allow(""),
     imgLink: Joi.string().allow(""),
     imgAlt: Joi.string().allow(""),
     newsUrl: Joi.string().required(),
-    materialType: Joi.string(),
+    materialType: Joi.string().allow(""),
   })
 );
 

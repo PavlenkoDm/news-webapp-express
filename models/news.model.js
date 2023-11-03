@@ -18,7 +18,7 @@ const newsSchema = new Schema(
     },
     title: {
       type: String,
-      required: [true, "Title is required"],
+      default: "",
     },
     publishDate: {
       type: String,
@@ -38,7 +38,7 @@ const newsSchema = new Schema(
     },
     category: {
       type: String,
-      required: [true, "Category is required"],
+      default: "",
     },
     imgLink: {
       type: String,
