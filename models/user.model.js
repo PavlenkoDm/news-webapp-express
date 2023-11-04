@@ -14,6 +14,7 @@ const userSchema = new Schema(
     name: {
       type: String,
       required: [true, "Email is required"],
+      minlength: 4,
     },
     password: {
       type: String,
@@ -23,6 +24,10 @@ const userSchema = new Schema(
       type: String,
       enum: themeList,
       default: "Dark",
+    },
+    accessToken: {
+      type: String,
+      default: "",
     },
   },
   { versionKey: false, timestamps: true }
