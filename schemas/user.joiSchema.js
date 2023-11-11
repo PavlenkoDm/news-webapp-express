@@ -13,9 +13,9 @@ const signInSchema = Joi.object({
   password: Joi.string().required(),
 });
 
-// const updateNewsSchema = Joi.object({
-//   isFavourite: Joi.boolean(),
-//   hasRead: Joi.boolean(),
-// });
+const refreshUserSchema = Joi.object({
+  email: Joi.string().pattern(emailRegexp).required(),
+  refToken: Joi.string().required(),
+});
 
-module.exports = { signUpSchema, signInSchema };
+module.exports = { signUpSchema, signInSchema, refreshUserSchema };

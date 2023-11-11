@@ -2,7 +2,7 @@ const { Schema, model } = require("mongoose");
 
 const handleMongooseError = require("../middlewares/handleMongooseError");
 
-const themeList = ["Light", "Dark"];
+const themeList = ["light", "dark"];
 
 const userSchema = new Schema(
   {
@@ -20,14 +20,14 @@ const userSchema = new Schema(
       type: String,
       required: [true, "Set password for user"],
     },
-    theme: {
+    userTheme: {
       type: String,
       enum: themeList,
-      default: "Dark",
+      default: "light",
     },
     accessToken: {
-      type: String,
-      default: "",
+      type: [String],
+      default: [],
     },
   },
   { versionKey: false, timestamps: true }

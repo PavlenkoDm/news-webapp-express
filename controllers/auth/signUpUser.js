@@ -6,7 +6,7 @@ const { httpError, dbFailure } = require("../../helpers");
 const signUpUser = async (req, res) => {
   const { name, email, password } = req.body;
   if (!name || !password || !email) {
-    throw httpError(400, "All sign up fields are required");
+    throw httpError(400, "All sign-up fields are required");
   }
 
   const user = await User.findOne({ email });
@@ -24,10 +24,11 @@ const signUpUser = async (req, res) => {
   if (!userNew) {
     dbFailure();
   }
+
   res.status(201);
   res.json({
     code: 201,
-    message: "User registration success",
+    message: "User sign-up success",
     user: {
       name: userNew.name,
       email: userNew.email,
