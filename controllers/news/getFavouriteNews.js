@@ -2,7 +2,11 @@ const { dbFailure } = require("../../helpers");
 const { News } = require("../../models");
 
 const getFavouriteNews = async (req, res) => {
-  const data = await News.find({ isFavourite: true }, "-createdAt -updatedAt -_id");
+  const { _id: id } = req.user;
+  const data = await News.find(
+    { $and: [{ isFavourite: true }, { newsOwner: id }] },
+    "-createdAt -updatedAt -_id -newsOwner"
+  );
   if (!data) {
     dbFailure();
     return;

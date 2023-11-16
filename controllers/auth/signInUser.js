@@ -45,21 +45,20 @@ const signInUser = async (req, res) => {
     dbFailure();
   }
 
-  const userInRefreshTokenCollection = await RefreshToken.findOne({
+  const userInRefresh = await RefreshToken.findOne({
     userEmail: userWithToken.email,
   });
 
-  if (!userInRefreshTokenCollection) {
-    const newUserInRefreshTokenCollection = await RefreshToken.create({
+  if (!userInRefresh) {
+    const newUserInRefresh = await RefreshToken.create({
       userEmail: userWithToken.email,
       refreshToken: [generatedRefreshToken],
     });
-
-    if (!newUserInRefreshTokenCollection) dbFailure();
+    if (!newUserInRefresh) dbFailure();
   } else {
     const currentDate = Date.now();
 
-    const validRefreshTokens = userInRefreshTokenCollection.refreshToken.filter(token => {
+    const validRefreshTokens = userInRefresh.refreshToken.filter(token => {
       const decoded = jwt.decode(token);
       const expirationTime = new Date(decoded.exp * 1000);
       return expirationTime > currentDate;

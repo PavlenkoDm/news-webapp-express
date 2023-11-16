@@ -4,10 +4,11 @@ const handleMongooseError = require("../middlewares/handleMongooseError");
 
 const newsSchema = new Schema(
   {
-    // newsOwner: {
-    //   type: String,
-    //   default: "",
-    // },
+    newsOwner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+      required: [true, "News owner is required "],
+    },
     isFavourite: {
       type: Boolean,
       default: false,

@@ -2,13 +2,18 @@ const { dbFailure, modifyDBResponse } = require("../../helpers");
 const { News } = require("../../models");
 
 const postNews = async (req, res) => {
-  const result = await News.deleteMany({});
+  const { _id: id } = req.user;
+  const result = await News.deleteMany({ newsOwner: id });
   if (!result) {
     dbFailure();
     return;
   }
 
-  const postedNews = await News.insertMany(req.body);
+  const newReqBody = req.body.map(element => {
+    return { ...element, newsOwner: id };
+  });
+
+  const postedNews = await News.insertMany(newReqBody);
   if (!postedNews) {
     dbFailure();
     return;
