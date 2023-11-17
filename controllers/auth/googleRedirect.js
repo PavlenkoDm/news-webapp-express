@@ -60,7 +60,7 @@ const googleRedirect = async (req, res) => {
   if (!userWithAccessToken) dbFailure();
 
   res.redirect(
-    `https://news-portal-refactor.vercel.app?name=${name}&email=${email}&access=${generatedAccessToken}&refresh=${generatedRefreshToken}`
+    `https://news-portal-refactor.vercel.app?user-id=${user._id}&name=${name}&email=${email}&access=${generatedAccessToken}&refresh=${generatedRefreshToken}`
   );
 };
 

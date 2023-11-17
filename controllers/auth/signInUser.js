@@ -77,6 +77,7 @@ const signInUser = async (req, res) => {
     code: 200,
     message: "User sign-in success",
     user: {
+      id: userWithToken._id,
       name: userWithToken.name,
       email: userWithToken.email,
     },
