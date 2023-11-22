@@ -11,6 +11,7 @@ const modifyDBResponse = arrToModify => {
       category,
       imgLink,
       newsUrl,
+      additionDate,
     } = newsObj;
     return {
       isFavourite,
@@ -23,6 +24,7 @@ const modifyDBResponse = arrToModify => {
       category,
       imgLink,
       newsUrl,
+      additionDate,
     };
   });
 };

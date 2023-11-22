@@ -23,7 +23,6 @@ const refreshUser = async (req, res) => {
   const generatedAccessToken = jwt.sign(payload, JWT_SECRET, { expiresIn: "1h" });
   const generatedRefreshToken = jwt.sign(payload, JWT_SECRET_REFRESH, { expiresIn: "23d" });
 
-  console.log(payload);
   const udatedUser = await User.findByIdAndUpdate(
     user._id,
     {

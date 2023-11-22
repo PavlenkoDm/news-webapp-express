@@ -3,7 +3,6 @@ const { News } = require("../../models");
 
 const getAllNews = async (req, res) => {
   const { _id: id } = req.user;
-  await News.deleteMany({ $and: [{ isFavourite: false }, { hasRead: false }, { newsOwner: id }] });
   const data = await News.find({ newsOwner: id }, "-createdAt -updatedAt -_id -newsOwner");
   if (!data) {
     dbFailure();

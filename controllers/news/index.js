@@ -5,6 +5,8 @@ const { getFavouriteNews } = require("./getFavouriteNews");
 const { getHasReadNews } = require("./getHasReadNews");
 const { postFavouriteNews } = require("./postFavouriteNews");
 const { postHasReadNews } = require("./postHasReadNews");
+const { getArchiveNews } = require("./getArchiveNews");
+const { removeArchiveNews } = require("./removeArchiveNews");
 
 module.exports = {
   getAllNews,
@@ -14,4 +16,6 @@ module.exports = {
   getHasReadNews,
   postFavouriteNews,
   postHasReadNews,
+  getArchiveNews,
+  removeArchiveNews,
 };

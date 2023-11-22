@@ -2,7 +2,7 @@ const { Schema, model } = require("mongoose");
 
 const handleMongooseError = require("../middlewares/handleMongooseError");
 
-const newsSchema = new Schema(
+const archiveSchema = new Schema(
   {
     newsOwner: {
       type: Schema.Types.ObjectId,
@@ -65,8 +65,8 @@ const newsSchema = new Schema(
   { versionKey: false, timestamps: true }
 );
 
-newsSchema.post("save", handleMongooseError);
+archiveSchema.post("save", handleMongooseError);
 
-const News = model("new", newsSchema);
+const Archive = model("archive", archiveSchema);
 
-module.exports = { News };
+module.exports = { Archive };
