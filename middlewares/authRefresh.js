@@ -6,23 +6,23 @@ const { User } = require("../models");
 const { JWT_SECRET_REFRESH } = process.env;
 
 const authRefresh = async (req, res, next) => {
-  const { authorization = "" } = req.headers;
-  const [bearer, token] = authorization.split(" ");
+  // const { authorization = "" } = req.headers;
+  // const [bearer, token] = authorization.split(" ");
 
   try {
-    if (bearer !== "Bearer") {
-      throw httpError(401, "No Bearer");
-    }
+    //   if (bearer !== "Bearer") {
+    //     throw httpError(401, "No Bearer");
+    //   }
 
-    if (!token) {
-      throw httpError(401, "No token");
-    }
+    //   if (!token) {
+    //     throw httpError(401, "No token");
+    //   }
+    const { refreshToken: token } = req.body;
 
     const { id } = jwt.verify(token, JWT_SECRET_REFRESH);
     if (!id) throw httpError(401, "Refresh token did not pass verification");
 
     const user = await User.findById(id);
-
     if (!user.email) {
       throw httpError(401, "Not authorized(auth middleware)");
     }

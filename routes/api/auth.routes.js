@@ -4,12 +4,13 @@ const router = express.Router();
 
 const { validateReqBody, auth, authRefresh } = require("../../middlewares");
 const { controllerWrapper } = require("../../helpers");
-const { signInSchema, signUpSchema } = require("../../schemas");
+const { signInSchema, signUpSchema, refreshUserSchema } = require("../../schemas");
 const {
   signUpUser,
   signInUser,
   signOutUser,
   refreshUser,
+  getCurrentUser,
   googleRedirect,
 } = require("../../controllers/auth");
 const { googleStrategy } = require("../../configs");
@@ -28,7 +29,14 @@ router.post("/sign-up", validateReqBody(signUpSchema), controllerWrapper(signUpU
 router.post("/sign-in", validateReqBody(signInSchema), controllerWrapper(signInUser));
 router.post("/sign-out", auth, controllerWrapper(signOutUser));
 
-router.get("/current-user", authRefresh, controllerWrapper(refreshUser));
+router.get("/current-user", auth, controllerWrapper(getCurrentUser));
+
+router.post(
+  "/refresh",
+  validateReqBody(refreshUserSchema),
+  authRefresh,
+  controllerWrapper(refreshUser)
+);
 
 router.get(
   "/google",
@@ -38,7 +46,7 @@ router.get(
 );
 router.get(
   "/google-redirect",
-  passport.authenticate("google", { failureRedirect: "http://localhost:5000/api/link" }),
+  passport.authenticate("google", { failureRedirect: "https://news-portal-refactor.vercel.app" }),
   controllerWrapper(googleRedirect)
 );
 
