@@ -4,7 +4,12 @@ const router = express.Router();
 
 const { validateReqBody, auth, authRefresh } = require("../../middlewares");
 const { controllerWrapper } = require("../../helpers");
-const { signInSchema, signUpSchema, refreshUserSchema } = require("../../schemas");
+const {
+  signInSchema,
+  signUpSchema,
+  refreshUserSchema,
+  updateUserEmailShema,
+} = require("../../schemas");
 const {
   signUpUser,
   signInUser,
@@ -12,6 +17,7 @@ const {
   refreshUser,
   getCurrentUser,
   googleRedirect,
+  updateUserEmail,
 } = require("../../controllers/auth");
 const { googleStrategy } = require("../../configs");
 
@@ -33,8 +39,8 @@ router.get("/current-user", auth, controllerWrapper(getCurrentUser));
 
 router.post(
   "/refresh",
-  validateReqBody(refreshUserSchema),
   authRefresh,
+  validateReqBody(refreshUserSchema),
   controllerWrapper(refreshUser)
 );
 
@@ -48,6 +54,13 @@ router.get(
   "/google-redirect",
   passport.authenticate("google", { failureRedirect: "https://news-portal-refactor.vercel.app" }),
   controllerWrapper(googleRedirect)
+);
+
+router.post(
+  "/update-email",
+  auth,
+  validateReqBody(updateUserEmailShema),
+  controllerWrapper(updateUserEmail)
 );
 
 module.exports = router;

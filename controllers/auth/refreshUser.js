@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const { JWT_SECRET, JWT_SECRET_REFRESH } = process.env;
 
 const { User, RefreshToken } = require("../../models");
-const { httpError, dbFailure } = require("../../helpers");
+const { httpError, dbFailure, sanifyTokenCollection } = require("../../helpers");
 
 const refreshUser = async (req, res) => {
   const user = req.user;
@@ -33,6 +33,8 @@ const refreshUser = async (req, res) => {
   if (!udatedUser) {
     dbFailure();
   }
+
+  await sanifyTokenCollection(udatedUser);
 
   filteredArrOfTokens.push(generatedRefreshToken);
 

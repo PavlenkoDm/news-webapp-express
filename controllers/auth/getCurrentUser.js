@@ -1,5 +1,5 @@
 const { User } = require("../../models");
-const { httpError } = require("../../helpers");
+const { httpError, sanifyTokenCollection } = require("../../helpers");
 
 const getCurrentUser = async (req, res) => {
   const { _id: id } = req.user;
@@ -7,6 +7,8 @@ const getCurrentUser = async (req, res) => {
   if (!user) {
     throw httpError(404, "User not found");
   }
+
+  await sanifyTokenCollection(user);
 
   const { name, email, userTheme } = user;
 

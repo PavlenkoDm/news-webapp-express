@@ -1,5 +1,10 @@
 const { createNewsSchema, updateNewsSchema, addNewsSchema } = require("./news.joiSchema");
-const { signInSchema, signUpSchema, refreshUserSchema } = require("./user.joiSchema");
+const {
+  signInSchema,
+  signUpSchema,
+  refreshUserSchema,
+  updateUserEmailShema,
+} = require("./user.joiSchema");
 
 module.exports = {
   createNewsSchema,
@@ -8,4 +13,5 @@ module.exports = {
   signInSchema,
   signUpSchema,
   refreshUserSchema,
+  updateUserEmailShema,
 };
