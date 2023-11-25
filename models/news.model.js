@@ -59,7 +59,8 @@ const newsSchema = new Schema(
     },
     additionDate: {
       type: Number,
-      required: [true, "Addition date is required"],
+      default: null,
+      required: false,
     },
   },
   { versionKey: false, timestamps: true }
