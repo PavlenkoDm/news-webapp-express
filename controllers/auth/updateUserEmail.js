@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt");
 
-const { User } = require("../../models");
+const { User, RefreshToken } = require("../../models");
 const { httpError, dbFailure } = require("../../helpers");
 
 const updateUserEmail = async (req, res) => {
@@ -18,6 +18,13 @@ const updateUserEmail = async (req, res) => {
     updatedAt: 0,
   });
   if (!updatedUser) dbFailure();
+
+  const userInRefresh = await RefreshToken.findOneAndUpdate(
+    { userEmail: user.email },
+    { userEmail: newEmail },
+    { new: true }
+  );
+  if (!userInRefresh) dbFailure();
 
   res.status(200);
   res.json({

@@ -4,6 +4,7 @@ const {
   signUpSchema,
   refreshUserSchema,
   updateUserEmailShema,
+  updateUserPasswordShema,
 } = require("./user.joiSchema");
 
 module.exports = {
@@ -14,4 +15,5 @@ module.exports = {
   signUpSchema,
   refreshUserSchema,
   updateUserEmailShema,
+  updateUserPasswordShema,
 };

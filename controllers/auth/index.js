@@ -5,6 +5,7 @@ const { refreshUser } = require("./refreshUser");
 const { getCurrentUser } = require("./getCurrentUser");
 const { googleRedirect } = require("./googleRedirect");
 const { updateUserEmail } = require("./updateUserEmail");
+const { updateUserPassword } = require("./updateUserPassword");
 
 module.exports = {
   signUpUser,
@@ -14,4 +15,5 @@ module.exports = {
   googleRedirect,
   getCurrentUser,
   updateUserEmail,
+  updateUserPassword,
 };

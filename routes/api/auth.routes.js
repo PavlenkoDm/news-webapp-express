@@ -9,6 +9,7 @@ const {
   signUpSchema,
   refreshUserSchema,
   updateUserEmailShema,
+  updateUserPasswordShema,
 } = require("../../schemas");
 const {
   signUpUser,
@@ -18,6 +19,7 @@ const {
   getCurrentUser,
   googleRedirect,
   updateUserEmail,
+  updateUserPassword,
 } = require("../../controllers/auth");
 const { googleStrategy } = require("../../configs");
 
@@ -61,6 +63,13 @@ router.post(
   auth,
   validateReqBody(updateUserEmailShema),
   controllerWrapper(updateUserEmail)
+);
+
+router.post(
+  "/update-password",
+  auth,
+  validateReqBody(updateUserPasswordShema),
+  controllerWrapper(updateUserPassword)
 );
 
 module.exports = router;

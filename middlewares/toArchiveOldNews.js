@@ -8,6 +8,13 @@ const toArchiveOldNews = async (req, res, next) => {
 
   const presentDate = Date.now();
 
+  const sanifyNewsCollection = await News.deleteMany({
+    newsOwner: id,
+    additionDate: null,
+    hasRead: false,
+  });
+  if (!sanifyNewsCollection) dbFailure();
+
   const allNews = await News.find({ newsOwner: id }, "-createdAt -updatedAt -_id");
   if (!allNews) throw httpError(401, "Unauthorized");
   if (allNews.length === 0) {
