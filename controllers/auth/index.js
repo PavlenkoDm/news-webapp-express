@@ -6,6 +6,7 @@ const { getCurrentUser } = require("./getCurrentUser");
 const { googleRedirect } = require("./googleRedirect");
 const { updateUserEmail } = require("./updateUserEmail");
 const { updateUserPassword } = require("./updateUserPassword");
+const { updateUserTheme } = require("./updateUserTheme");
 
 module.exports = {
   signUpUser,
@@ -16,4 +17,5 @@ module.exports = {
   getCurrentUser,
   updateUserEmail,
   updateUserPassword,
+  updateUserTheme,
 };

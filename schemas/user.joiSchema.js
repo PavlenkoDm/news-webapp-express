@@ -27,10 +27,15 @@ const updateUserPasswordShema = Joi.object({
   oldPassword: Joi.string().required(),
 });
 
+const updateTheme = Joi.object({
+  theme: Joi.string().valid("light", "dark").required(),
+});
+
 module.exports = {
   signUpSchema,
   signInSchema,
   refreshUserSchema,
   updateUserEmailShema,
   updateUserPasswordShema,
+  updateTheme,
 };

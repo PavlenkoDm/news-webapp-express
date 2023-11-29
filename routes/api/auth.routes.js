@@ -10,6 +10,7 @@ const {
   refreshUserSchema,
   updateUserEmailShema,
   updateUserPasswordShema,
+  updateTheme,
 } = require("../../schemas");
 const {
   signUpUser,
@@ -20,6 +21,7 @@ const {
   googleRedirect,
   updateUserEmail,
   updateUserPassword,
+  updateUserTheme,
 } = require("../../controllers/auth");
 const { googleStrategy } = require("../../configs");
 
@@ -58,18 +60,25 @@ router.get(
   controllerWrapper(googleRedirect)
 );
 
-router.post(
+router.patch(
   "/update-email",
   auth,
   validateReqBody(updateUserEmailShema),
   controllerWrapper(updateUserEmail)
 );
 
-router.post(
+router.patch(
   "/update-password",
   auth,
   validateReqBody(updateUserPasswordShema),
   controllerWrapper(updateUserPassword)
+);
+
+router.patch(
+  "/update-theme",
+  auth,
+  validateReqBody(updateTheme),
+  controllerWrapper(updateUserTheme)
 );
 
 module.exports = router;
