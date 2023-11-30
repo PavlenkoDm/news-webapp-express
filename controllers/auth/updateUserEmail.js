@@ -5,15 +5,19 @@ const { httpError, dbFailure } = require("../../helpers");
 
 const updateUserEmail = async (req, res) => {
   const { _id: id } = req.user;
-  const { newEmail, oldPassword } = req.body;
+  const { updatedEmail, currentPassword } = req.body;
 
   const user = await User.findById(id, "-createdAt -updatedAt");
   if (!user) throw httpError(404, "User not found");
 
-  const passwordCompare = await bcrypt.compare(oldPassword, user.password);
+  const passwordCompare = await bcrypt.compare(currentPassword, user.password);
   if (!passwordCompare) throw httpError(400, "Password incorrect");
 
-  const updatedUser = await User.findByIdAndUpdate(id, { email: newEmail }, { new: true }).select({
+  const updatedUser = await User.findByIdAndUpdate(
+    id,
+    { email: updatedEmail },
+    { new: true }
+  ).select({
     createdAt: 0,
     updatedAt: 0,
   });
@@ -21,7 +25,7 @@ const updateUserEmail = async (req, res) => {
 
   const userInRefresh = await RefreshToken.findOneAndUpdate(
     { userEmail: user.email },
-    { userEmail: newEmail },
+    { userEmail: updatedEmail },
     { new: true }
   );
   if (!userInRefresh) dbFailure();
