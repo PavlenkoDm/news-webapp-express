@@ -3,14 +3,14 @@ const { httpError, dbFailure } = require("../../helpers");
 
 const updateUserTheme = async (req, res) => {
   const { _id: id } = req.user;
-  const { updateTheme } = req.body;
+  const { updatedTheme } = req.body;
 
   const user = await User.findById(id, "-createdAt -updatedAt");
   if (!user) throw httpError(404, "User not found");
 
   const updatedUser = await User.findByIdAndUpdate(
     id,
-    { userTheme: updateTheme },
+    { userTheme: updatedTheme },
     { new: true }
   ).select({
     createdAt: 0,
@@ -22,7 +22,7 @@ const updateUserTheme = async (req, res) => {
   res.json({
     code: 200,
     message: "Theme is successfully updated",
-    userTheme: updateTheme,
+    userTheme: updatedTheme,
   });
 };
 
