@@ -8,12 +8,12 @@ const removeArchiveNews = async (req, res) => {
     dbFailure();
     return;
   }
-  const { title, newsUrl } = response;
+  const { _id } = response;
   res.status(200);
   res.json({
     code: 200,
     message: "Remove news success",
-    data: { title, newsUrl },
+    _id,
   });
 };
 
