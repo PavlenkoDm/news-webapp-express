@@ -28,7 +28,7 @@ const updateUserPasswordShema = Joi.object({
 });
 
 const updateTheme = Joi.object({
-  theme: Joi.string().valid("light", "dark").required(),
+  updatedTheme: Joi.string().valid("light", "dark").required(),
 });
 
 module.exports = {
