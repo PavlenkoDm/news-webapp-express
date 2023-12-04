@@ -1,5 +1,5 @@
 const { dbFailure } = require("../../helpers");
-const { Archive } = require("../../models");
+const { Archive, NewsHistoryLog } = require("../../models");
 
 const removeArchiveNews = async (req, res) => {
   const { id } = req.params;
@@ -8,7 +8,19 @@ const removeArchiveNews = async (req, res) => {
     dbFailure();
     return;
   }
-  const { _id } = response;
+  const { _id, newsOwner, title, category, newsUrl, additionDate } = response;
+  const newsLog = await NewsHistoryLog.create({
+    newsOwner,
+    title,
+    category,
+    newsUrl,
+    additionDate,
+  });
+  if (!newsLog) {
+    dbFailure();
+    return;
+  }
+
   res.status(200);
   res.json({
     code: 200,

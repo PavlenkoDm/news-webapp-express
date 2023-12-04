@@ -7,6 +7,7 @@ const { postFavouriteNews } = require("./postFavouriteNews");
 const { postHasReadNews } = require("./postHasReadNews");
 const { getArchiveNews } = require("./getArchiveNews");
 const { removeArchiveNews } = require("./removeArchiveNews");
+const { getHistoryLog } = require("./getHistoryLog");
 
 module.exports = {
   getAllNews,
@@ -18,4 +19,5 @@ module.exports = {
   postHasReadNews,
   getArchiveNews,
   removeArchiveNews,
+  getHistoryLog,
 };

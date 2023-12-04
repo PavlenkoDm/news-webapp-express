@@ -16,6 +16,7 @@ const {
   // postHasReadNews,
   getArchiveNews,
   removeArchiveNews,
+  getHistoryLog,
 } = require("../../controllers/news");
 const { addNewsSchema } = require("../../schemas");
 const { controllerWrapper } = require("../../helpers");
@@ -43,5 +44,7 @@ router.get(
 
 router.get("/archive", auth, controllerWrapper(getArchiveNews));
 router.delete("/archive/:id", auth, controllerWrapper(removeArchiveNews));
+
+router.get("/history-log", auth, controllerWrapper(getHistoryLog));
 
 module.exports = router;
