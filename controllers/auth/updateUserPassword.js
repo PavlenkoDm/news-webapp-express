@@ -5,7 +5,7 @@ const { httpError, dbFailure } = require("../../helpers");
 
 const updateUserPassword = async (req, res) => {
   const { _id: id } = req.user;
-  const { newPassword, oldPassword } = req.body;
+  const { password: newPassword, newPassword: oldPassword } = req.body;
 
   const user = await User.findById(id, "-createdAt -updatedAt");
   if (!user) throw httpError(404, "User not found");
