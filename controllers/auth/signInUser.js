@@ -2,11 +2,10 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const { User, RefreshToken } = require("../../models");
-const { httpError, dbFailure } = require("../../helpers");
-
-const { JWT_SECRET, JWT_SECRET_REFRESH } = process.env;
+const { httpError, dbFailure, generateAccessRefreshTokens } = require("../../helpers");
 
 const signInUser = async (req, res) => {
+  console.log(req);
   const { email, password } = req.body;
   if (!password || !email) {
     throw httpError(400, "All sign-in fields are required");
@@ -32,9 +31,7 @@ const signInUser = async (req, res) => {
     await User.findByIdAndUpdate(user._id, { accessToken: validAccessTokens });
   }
 
-  const payload = { id: user._id };
-  const generatedAccessToken = jwt.sign(payload, JWT_SECRET, { expiresIn: "3m" });
-  const generatedRefreshToken = jwt.sign(payload, JWT_SECRET_REFRESH, { expiresIn: "23d" });
+  const { generatedAccessToken, generatedRefreshToken } = generateAccessRefreshTokens(user._id);
 
   const userWithToken = await User.findByIdAndUpdate(
     user._id,

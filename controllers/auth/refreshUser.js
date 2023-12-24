@@ -1,9 +1,10 @@
-const jwt = require("jsonwebtoken");
-
-const { JWT_SECRET, JWT_SECRET_REFRESH } = process.env;
-
 const { User, RefreshToken } = require("../../models");
-const { httpError, dbFailure, sanifyTokenCollection } = require("../../helpers");
+const {
+  httpError,
+  dbFailure,
+  sanifyTokenCollection,
+  generateAccessRefreshTokens,
+} = require("../../helpers");
 
 const refreshUser = async (req, res) => {
   const user = req.user;
@@ -19,9 +20,7 @@ const refreshUser = async (req, res) => {
     item => item !== user.refreshToken
   );
 
-  const payload = { id: user._id };
-  const generatedAccessToken = jwt.sign(payload, JWT_SECRET, { expiresIn: "1h" });
-  const generatedRefreshToken = jwt.sign(payload, JWT_SECRET_REFRESH, { expiresIn: "23d" });
+  const { generatedAccessToken, generatedRefreshToken } = generateAccessRefreshTokens(user._id);
 
   const udatedUser = await User.findByIdAndUpdate(
     user._id,

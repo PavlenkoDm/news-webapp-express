@@ -2,7 +2,7 @@ const express = require("express");
 const passport = require("passport");
 const router = express.Router();
 
-const { validateReqBody, auth, authRefresh } = require("../../middlewares");
+const { validateReqBody, auth, authRefresh, authPasswordChange } = require("../../middlewares");
 const { controllerWrapper } = require("../../helpers");
 const {
   signInSchema,
@@ -95,9 +95,10 @@ router.post(
 
 router.post(
   "/forgot-password-change",
-  auth,
+  authPasswordChange,
   validateReqBody(forgotPasswordChangeSchema),
-  controllerWrapper(forgotPasswordChange)
+  controllerWrapper(forgotPasswordChange),
+  controllerWrapper(signInUser)
 );
 
 module.exports = router;

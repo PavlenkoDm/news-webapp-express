@@ -1,10 +1,12 @@
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
 
 const { User, RefreshToken } = require("../../models");
-const { httpError, dbFailure, sanifyTokenCollection } = require("../../helpers");
-
-const { JWT_SECRET, JWT_SECRET_REFRESH } = process.env;
+const {
+  httpError,
+  dbFailure,
+  sanifyTokenCollection,
+  generateAccessRefreshTokens,
+} = require("../../helpers");
 
 const googleRedirect = async (req, res) => {
   const { sub: id, name, email } = req.user._json;
@@ -28,9 +30,7 @@ const googleRedirect = async (req, res) => {
     throw httpError(401, "User is not authentified");
   }
 
-  const payload = { id: user._id };
-  const generatedAccessToken = jwt.sign(payload, JWT_SECRET, { expiresIn: "1h" });
-  const generatedRefreshToken = jwt.sign(payload, JWT_SECRET_REFRESH, { expiresIn: "23d" });
+  const { generatedAccessToken, generatedRefreshToken } = generateAccessRefreshTokens(user._id);
 
   const userInRefresh = await RefreshToken.findOne({ userEmail: email });
 

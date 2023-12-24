@@ -15,7 +15,7 @@ const forgotPasswordReq = async (req, res) => {
 
   const payload = { id: userInBase._id };
 
-  const generatedToken = jwt.sign(payload, JWT_SECRET, { expiresIn: "1h" });
+  const generatedToken = jwt.sign(payload, JWT_SECRET, { expiresIn: "23h" });
 
   await sendMail(email, generatedToken);
   res.status(200);

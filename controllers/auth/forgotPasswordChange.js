@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 const { User } = require("../../models");
 const { dbFailure } = require("../../helpers");
 
-const forgotPasswordChange = async (req, res) => {
+const forgotPasswordChange = async (req, res, next) => {
   const { _id: id } = req.user;
   const { newPassword } = req.body;
 
@@ -19,11 +19,9 @@ const forgotPasswordChange = async (req, res) => {
   });
   if (!updatedUser) dbFailure();
 
-  res.status(200);
-  res.json({
-    code: 200,
-    message: "Password changed successfully",
-  });
+  req.body = { email: updatedUser.email, password: newPassword };
+
+  next();
 };
 
 module.exports = { forgotPasswordChange };

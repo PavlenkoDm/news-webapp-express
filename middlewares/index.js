@@ -4,6 +4,7 @@ const auth = require("./auth");
 const authRefresh = require("./authRefresh");
 const toArchiveOldNews = require("./toArchiveOldNews");
 const sanifyNewsCollection = require("./sanifyNewsCollection");
+const authPasswordChange = require("./authPasswordChange");
 
 module.exports = {
   validateReqBody,
@@ -12,4 +13,5 @@ module.exports = {
   authRefresh,
   toArchiveOldNews,
   sanifyNewsCollection,
+  authPasswordChange,
 };
