@@ -37,7 +37,7 @@ async function sendMail(emailOfUser, passwordToken) {
       subject: "News portal, change password letter",
       html: `<h2>Changing the password for the "News" application!</h2>
           <p>If it is you who is changing the password registered to e-mail: ${emailOfUser},<p>
-          <p>then click <a target="_blank" href="${BASE_URL_FRONTEND}/auth/forgot-password-change?token=${passwordToken}&openModal=true">"Yes"</a>,<p> 
+          <p>then click <a target="_blank" href="${BASE_URL_FRONTEND}?token=${passwordToken}&openModal=true">"Yes"</a>,<p> 
           <p>but if it is not you who is trying to change the password, then ignore this message.</p>
           `,
     };
