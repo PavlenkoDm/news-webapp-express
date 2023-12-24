@@ -7,8 +7,8 @@ const { sendMail } = require("../../services");
 const { JWT_SECRET } = process.env;
 
 const forgotPasswordReq = async (req, res) => {
-  const { recoveryEmail } = req.body;
-  const userInBase = await User.findOne({ email: recoveryEmail }, "-createdAt -updatedAt");
+  const { email } = req.body;
+  const userInBase = await User.findOne({ email }, "-createdAt -updatedAt");
   if (!userInBase) {
     throw httpError(404, "User not found");
   }
@@ -17,7 +17,7 @@ const forgotPasswordReq = async (req, res) => {
 
   const generatedToken = jwt.sign(payload, JWT_SECRET, { expiresIn: "1h" });
 
-  await sendMail(recoveryEmail, generatedToken);
+  await sendMail(email, generatedToken);
   res.status(200);
   res.json({
     code: 200,

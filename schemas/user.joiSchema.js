@@ -32,11 +32,11 @@ const updateThemeSchema = Joi.object({
 });
 
 const forgotPasswordReqSchema = Joi.object({
-  recoveryEmail: Joi.string().pattern(emailRegexp).required(),
+  email: Joi.string().pattern(emailRegexp).required(),
 });
 
 const forgotPasswordChangeSchema = Joi.object({
-  changedPassword: Joi.string().required(),
+  newPassword: Joi.string().required(),
 });
 
 module.exports = {

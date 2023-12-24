@@ -5,9 +5,9 @@ const { dbFailure } = require("../../helpers");
 
 const forgotPasswordChange = async (req, res) => {
   const { _id: id } = req.user;
-  const { changedPassword } = req.body;
+  const { newPassword } = req.body;
 
-  const hashedNewPassword = await bcrypt.hash(changedPassword, 10);
+  const hashedNewPassword = await bcrypt.hash(newPassword, 10);
 
   const updatedUser = await User.findByIdAndUpdate(
     id,
