@@ -10,8 +10,11 @@ const {
   refreshUserSchema,
   updateUserEmailShema,
   updateUserPasswordShema,
-  updateTheme,
+  updateThemeSchema,
+  forgotPasswordReqSchema,
+  forgotPasswordChangeSchema,
 } = require("../../schemas");
+
 const {
   signUpUser,
   signInUser,
@@ -22,7 +25,10 @@ const {
   updateUserEmail,
   updateUserPassword,
   updateUserTheme,
+  forgotPasswordReq,
+  forgotPasswordChange,
 } = require("../../controllers/auth");
+
 const { googleStrategy } = require("../../configs");
 
 passport.use(googleStrategy);
@@ -77,8 +83,21 @@ router.patch(
 router.patch(
   "/update-theme",
   auth,
-  validateReqBody(updateTheme),
+  validateReqBody(updateThemeSchema),
   controllerWrapper(updateUserTheme)
+);
+
+router.post(
+  "/forgot-password-request",
+  validateReqBody(forgotPasswordReqSchema),
+  controllerWrapper(forgotPasswordReq)
+);
+
+router.post(
+  "/forgot-password-change",
+  auth,
+  validateReqBody(forgotPasswordChangeSchema),
+  controllerWrapper(forgotPasswordChange)
 );
 
 module.exports = router;

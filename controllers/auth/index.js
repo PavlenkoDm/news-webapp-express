@@ -7,6 +7,8 @@ const { googleRedirect } = require("./googleRedirect");
 const { updateUserEmail } = require("./updateUserEmail");
 const { updateUserPassword } = require("./updateUserPassword");
 const { updateUserTheme } = require("./updateUserTheme");
+const { forgotPasswordReq } = require("./forgotPasswordReq");
+const { forgotPasswordChange } = require("./forgotPasswordChange");
 
 module.exports = {
   signUpUser,
@@ -18,4 +20,6 @@ module.exports = {
   updateUserEmail,
   updateUserPassword,
   updateUserTheme,
+  forgotPasswordReq,
+  forgotPasswordChange,
 };

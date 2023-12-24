@@ -27,8 +27,16 @@ const updateUserPasswordShema = Joi.object({
   oldPassword: Joi.string().required(),
 });
 
-const updateTheme = Joi.object({
+const updateThemeSchema = Joi.object({
   updatedTheme: Joi.string().valid("light", "dark").required(),
+});
+
+const forgotPasswordReqSchema = Joi.object({
+  recoveryEmail: Joi.string().pattern(emailRegexp).required(),
+});
+
+const forgotPasswordChangeSchema = Joi.object({
+  changedPassword: Joi.string().required(),
 });
 
 module.exports = {
@@ -37,5 +45,7 @@ module.exports = {
   refreshUserSchema,
   updateUserEmailShema,
   updateUserPasswordShema,
-  updateTheme,
+  updateThemeSchema,
+  forgotPasswordReqSchema,
+  forgotPasswordChangeSchema,
 };
