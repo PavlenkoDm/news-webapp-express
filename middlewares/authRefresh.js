@@ -24,7 +24,7 @@ const authRefresh = async (req, res, next) => {
 
     const user = await User.findById(id);
     if (!user.email) {
-      throw httpError(401, "Not authorized(auth middleware)");
+      throw httpError(401, "Not authorized");
     }
 
     const extendedUser = {

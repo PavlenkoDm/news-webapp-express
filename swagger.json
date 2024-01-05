@@ -1,0 +1,1077 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "version": "1.0.0",
+    "title": "NEWS-WEBAPP-EXPRESS API",
+    "description": "NEWS-WEBAPP-EXPRESS API Documentation",
+    "license": {
+      "name": "URL to repository",
+      "url": "https://github.com/PavlenkoDm/news-webapp-express"
+    }
+  },
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "servers": [
+    {
+      "url": "https://news-webapp-express.onrender.com"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "Authorization and service endpoints for user"
+    },
+    {
+      "name": "News",
+      "description": "News endpoints"
+    }
+  ],
+  "paths": {
+    "/api/auth/sign-up": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User registration",
+        "parameters": [],
+        "requestBody": {
+          "description": "# Body description queries:\n\n**name** - string, user name.\n\n**email** - string, mail address. \n\n**password** - string, user password. \n",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegistrationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "**New User Registered**\n\nResponse body description :\n\n**code** - status code\n\n**message** - status message\n\n**user** - object, User information.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegistrationResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error. All sign-up fields are required and must be filled in with correct values",
+            "content": {}
+          },
+          "409": {
+            "description": "Error. Email already in use",
+            "content": {}
+          },
+          "500": {
+            "description": "Error. Database processing is failed",
+            "content": {}
+          }
+        }
+      }
+    },
+
+    "/api/auth/sign-in": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User login",
+        "parameters": [],
+        "requestBody": {
+          "description": "# Body description queries:\n\n**email** - string, mail address. \n\n**password** - string, user password. \n",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "**Successful operation**",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error. All sign-in fields are required and must be filled in with correct values",
+            "content": {}
+          },
+          "401": {
+            "description": "Error. User is not authentified / Password is not valid",
+            "content": {}
+          },
+          "500": {
+            "description": "Error. Database processing is failed",
+            "content": {}
+          }
+        }
+      }
+    },
+
+    "/api/auth/sign-out": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User logout",
+        "parameters": [],
+        "description": "# Log out",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful sign-out",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LogOutResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Error. User is not authorized",
+            "content": {}
+          },
+          "500": {
+            "description": "Error. Database processing is failed",
+            "content": {}
+          }
+        }
+      }
+    },
+
+    "/api/auth/refresh": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Refresh tokens",
+        "parameters": [],
+        "description": "# Refresh user and tokens\n \nIn headers must be refresh token.",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Refreshed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RefreshTokenResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error. Token not found",
+            "content": {}
+          },
+          "401": {
+            "description": "Error. Refresh token did not pass verification / Not authorized",
+            "content": {}
+          },
+          "500": {
+            "description": "Error. Database processing is failed",
+            "content": {}
+          }
+        }
+      }
+    },
+
+    "/api/auth/current-user": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "Get current user",
+        "parameters": [],
+        "description": "# Get current user info\n \nIn headers must be access token.",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "# Get current user info success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CurrentUserResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error. User not found",
+            "content": {}
+          },
+          "401": {
+            "description": "Error. No Bearer / No token / Access token did not pass verification / Not authorized(auth middleware)",
+            "content": {}
+          }
+        }
+      }
+    },
+
+    "/api/auth/update-email": {
+      "patch": {
+        "tags": ["Auth"],
+        "summary": "Update user email",
+        "parameters": [],
+        "description": "# Changing user's email\n \nIn headers must be access token.",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "requestBody": {
+          "description": "# Body description queries:\n\n**updatedEmail** - string, user email.\n\n**currentPassword** - string, user password.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUserEmailRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateUserEmailResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error. Password incorrect",
+            "content": {}
+          },
+          "404": {
+            "description": "Error. User not found",
+            "content": {}
+          },
+          "401": {
+            "description": "Error. No Bearer / No token / Access token did not pass verification / Not authorized(auth middleware)",
+            "content": {}
+          },
+          "500": {
+            "description": "Error. Database processing is failed",
+            "content": {}
+          }
+        }
+      }
+    },
+
+    "/api/auth/update-password": {
+      "patch": {
+        "tags": ["Auth"],
+        "summary": "",
+        "parameters": [],
+        "description": "**Sending request for assistance**",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "requestBody": {
+          "description": "Comment and email",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HelpRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "400": {
+            "description": "Error. Email required or Error. Comment required",
+            "content": {}
+          },
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HelpResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/api/users/current": {
+      "get": {
+        "tags": ["News"],
+        "summary": "Get current user info",
+        "parameters": [],
+        "description": "**Authorization token must be included**",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "requestBody": {
+          "description": "User's token",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CurrentUserRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CurrentUserResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authorized",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/api/users": {
+      "patch": {
+        "tags": ["News"],
+        "summary": "Update current user info",
+        "parameters": [],
+        "description": "**Authorization token must be included**",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "requestBody": {
+          "description": "New avatar or or new password, email",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserUpdateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Update success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateUserResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authorized",
+            "content": {}
+          },
+          "500": {
+            "description": "Error updating user",
+            "content": {}
+          }
+        }
+      }
+    }
+  },
+
+  "components": {
+    "schemas": {
+      "RegistrationRequest": {
+        "type": "object",
+        "required": ["name", "email", "password"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "User's name",
+            "example": "Joon Snow"
+          },
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "example": "joonsnow@gmail.com",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password",
+            "example": "AbraCadabra123"
+          }
+        }
+      },
+      "RegistrationResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "http",
+            "example": "201"
+          },
+          "message": {
+            "type": "string",
+            "example": "User sign-up success"
+          },
+          "user": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "example": "Joon Snow"
+              },
+              "email": {
+                "type": "string",
+                "example": "joonsnow@gmail.com"
+              }
+            }
+          }
+        }
+      },
+
+      "LoginRequest": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "example": "joonsnow@gmail.com",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password",
+            "example": "AbraCadabra123"
+          }
+        }
+      },
+      "LoginResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "http",
+            "example": "200"
+          },
+          "message": {
+            "type": "string",
+            "example": "User sign-in success"
+          },
+          "user": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string",
+                "description": "User's name",
+                "example": "Joon Snow"
+              },
+              "email": {
+                "type": "string",
+                "description": "User's email",
+                "example": "joonsnow@gmail.com",
+                "format": "email"
+              }
+            }
+          },
+          "userTheme": {
+            "type": "string",
+            "description": "User's aplication theme",
+            "example": "dark"
+          },
+          "accessToken": {
+            "type": "string",
+            "description": "User's access token"
+          },
+          "refreshToken": {
+            "type": "string",
+            "description": "User's refresh token"
+          }
+        }
+      },
+
+      "LogOutResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "http",
+            "example": "200"
+          },
+          "message": {
+            "type": "string",
+            "example": "Sign-out success"
+          }
+        }
+      },
+
+      "RefreshTokenResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "http",
+            "example": "200"
+          },
+          "message": {
+            "type": "string",
+            "example": "Refresh user success"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "accessToken": {
+                "type": "string",
+                "description": "User's accessToken",
+                "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0OTVkNjJlNjE4MzgwMzY4NTk0NDZjNCIsImlhdCI6MTY4NzYxMjMzMCwiZXhwIjoxNjg3Njk4NzMwfQ.Exk_soSUARn-t-7FDQKsiFBTutt_vc9ok9UPuTdGqBU"
+              },
+              "refreshToken": {
+                "type": "string",
+                "description": "User's refreshToken",
+                "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0OTVkNjJlNjE4MzgwMzY4NTk0NDZjNCIsImlhdCI6MTY4NzYxMjMzMCwiZXhwIjoxNjg3Njk4NzMwfQ.Exk_soSUARn-t-7FDQKsiFBTutt_vc9ok9UPuTdGqBU"
+              }
+            }
+          }
+        }
+      },
+
+      "CurrentUserResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "http",
+            "example": "200"
+          },
+          "message": {
+            "type": "string",
+            "example": "Get current user success"
+          },
+          "user": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "User's id"
+              },
+              "name": {
+                "type": "string",
+                "description": "User's name",
+                "example": "Joon Snow"
+              },
+              "email": {
+                "type": "string",
+                "description": "User's email",
+                "example": "joonsnow@gmail.com",
+                "format": "email"
+              }
+            }
+          },
+          "userTheme": {
+            "type": "string",
+            "description": "User's theme",
+            "example": "dark"
+          }
+        }
+      },
+
+      "UpdateUserEmailRequest": {
+        "type": "object",
+        "properties": {
+          "updatedEmail": {
+            "type": "string",
+            "description": "User's email",
+            "example": "joonsnow@gmail.com",
+            "format": "email"
+          },
+          "currentPassword": {
+            "type": "string",
+            "description": "User's password",
+            "example": "AbraCadabra123"
+          }
+        }
+      },
+      "UpdateUserEmailResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "http",
+            "example": "200"
+          },
+          "message": {
+            "type": "string",
+            "example": "Email is successfully updated"
+          },
+          "newEmail": {
+            "type": "string",
+            "description": "User's email",
+            "example": "joonsnow@gmail.com",
+            "format": "email"
+          }
+        }
+      },
+
+      "DragAndDropResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "code",
+            "example": "200"
+          },
+          "message": {
+            "type": "string",
+            "description": "New column position",
+            "example": "Update position column"
+          }
+        }
+      },
+      "DragAndDropResponseTask": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "code",
+            "example": "200"
+          },
+          "message": {
+            "type": "string",
+            "description": "Update position task ",
+            "example": "Update position task "
+          }
+        }
+      },
+      "MoveTasktoColumn": {
+        "type": "object",
+        "properties": {
+          "idTask": {
+            "type": "string",
+            "description": "Task id",
+            "example": "64cb959c72ea7093c67658a2"
+          },
+          "idColumnNew": {
+            "type": "string",
+            "description": "Id of new Column",
+            "example": "64cb87380bd2f83e83f216b9"
+          },
+          "dataOld": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Task id",
+                "example": "64cb8603ccecc89b385e073f"
+              },
+              "order": {
+                "type": "http",
+                "description": "Task order",
+                "example": "6"
+              }
+            }
+          },
+          "dataNew": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Task id",
+                "example": "64cb8603ccecc89b385e073f"
+              },
+              "order": {
+                "type": "http",
+                "description": "Task order",
+                "example": "6"
+              }
+            }
+          }
+        }
+      },
+      "HelpRequest": {
+        "type": "object",
+        "properties": {
+          "comment": {
+            "type": "string",
+            "description": "Issue",
+            "example": "theme is not working"
+          },
+          "email": {
+            "type": "string",
+            "description": "Email",
+            "example": "johnWick@gmail.com"
+          }
+        }
+      },
+      "HelpResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "code",
+            "example": "200"
+          },
+          "message": {
+            "type": "string",
+            "description": "Send Email",
+            "example": "johnWick@gmail.com"
+          }
+        }
+      },
+      "UserUpdateRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "New name",
+            "example": "John Wick"
+          },
+          "email": {
+            "type": "string",
+            "description": "New email",
+            "example": "johnWick@gmail.com"
+          },
+          "password": {
+            "type": "string",
+            "description": "New password",
+            "example": "123456"
+          }
+        }
+      },
+      "UpdateUserResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Updated user",
+            "example": "Update success"
+          },
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "New name",
+              "example": "John Wick"
+            },
+            "email": {
+              "type": "string",
+              "description": "New email",
+              "example": "johnWick@gmail.com"
+            },
+            "theme": {
+              "type": "string",
+              "description": "theme",
+              "example": "violet"
+            },
+            "avatarURL": {
+              "type": "string",
+              "description": "New avatar",
+              "example": ""
+            }
+          }
+        }
+      },
+      "Id": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "User id",
+            "example": "64cb8603ccecc89b385e073f"
+          }
+        }
+      },
+      "BoardId": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "User id",
+            "example": "64cb8603ccecc89b385e073f"
+          }
+        }
+      },
+      "AllBoardsResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "http",
+            "description": "Code",
+            "example": "200"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response message",
+            "example": "Success"
+          },
+          "boards": {
+            "type": "object",
+            "properties": {
+              "title": {
+                "example": "Task",
+                "description": "Board title"
+              },
+              "icon": {
+                "example": "icon-Project",
+                "description": "Board icon"
+              },
+              "background": {
+                "example": "empty",
+                "description": "Board background"
+              },
+              "user": {
+                "example": "Exk_soSUARn-t-7FDQKsiFBTutt_vc9ok9UPuTdGqBU",
+                "description": "Board owner "
+              }
+            }
+          }
+        }
+      },
+      "BoardResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "http",
+            "description": "Code",
+            "example": "200"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response message",
+            "example": "Success"
+          },
+          "board": {
+            "type": "string",
+            "description": "Board id",
+            "example": "64cb8603ccecc89b385e073f"
+          },
+          "column": {
+            "type": "string",
+            "description": "Column id",
+            "example": "64cb8603ccecc89b385e073f"
+          },
+          "cards": {
+            "type": "string",
+            "description": "cards id",
+            "example": "64cb8603ccecc89b385e073f"
+          }
+        }
+      },
+      "AddBoard": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "http",
+            "description": "Code",
+            "example": "201"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response message",
+            "example": "Success"
+          },
+          "newBoard": {
+            "type": "object",
+            "description": "New Board",
+            "example": "{}"
+          }
+        }
+      },
+      "UpdateBoard": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "http",
+            "description": "Code",
+            "example": "201"
+          },
+          "result": {
+            "type": "object",
+            "description": "New Board",
+            "example": "{}"
+          }
+        }
+      },
+      "DeletedBoard": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "http",
+            "description": "Code",
+            "example": "201"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response message",
+            "example": "Board delete success"
+          }
+        }
+      },
+      "DeletedColumn": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "http",
+            "description": "Code",
+            "example": "201"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response message",
+            "example": "Column delete success"
+          }
+        }
+      },
+      "GetColumn": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Column id",
+            "example": "64cb8603ccecc89b385e073f"
+          }
+        }
+      },
+      "ColumnResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "http",
+            "description": "Code",
+            "example": "200"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response message",
+            "example": "Success"
+          },
+          "column": {
+            "type": "string",
+            "description": "Column ids",
+            "example": "64cb8603ccecc89b385e073f"
+          }
+        }
+      },
+      "NewColumnResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "http",
+            "description": "Code",
+            "example": "200"
+          },
+          "result": {
+            "type": "string",
+            "description": "new column",
+            "example": "{}"
+          }
+        }
+      },
+      "NewColumnRequest": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Project name",
+            "example": "TaskPro Project"
+          },
+          "columnOwner": {
+            "type": "string",
+            "description": "Board id",
+            "example": "64cb8603ccecc89b385e073f"
+          },
+          "orderColumn": {
+            "type": "string",
+            "description": "Number",
+            "example": "5"
+          }
+        }
+      },
+      "CardResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "http",
+            "description": "Code",
+            "example": "200"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response message",
+            "example": "Success"
+          },
+          "card": {
+            "type": "object",
+            "properties": {
+              "title": {
+                "type": "string",
+                "description": "Card Name",
+                "example": "Create a "
+              },
+              "message": {
+                "type": "string",
+                "description": "Response message",
+                "example": "Success"
+              },
+              "column": {
+                "type": "string",
+                "description": "Column ids",
+                "example": "64cb8603ccecc89b385e073f"
+              }
+            }
+          }
+        }
+      },
+      "CardDeleteResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "http",
+            "description": "Code",
+            "example": "200"
+          },
+          "message": {
+            "type": "string",
+            "description": "Task delete success",
+            "example": "Task delete success"
+          }
+        }
+      },
+      "Email": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "Email",
+            "example": "johnWick@gmail.com"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

@@ -4,6 +4,8 @@ const path = require("path");
 const logger = require("morgan");
 const cors = require("cors");
 const passport = require("passport");
+const swaggerUi = require("swagger-ui-express");
+const swaggerDocument = require("./swagger.json");
 require("dotenv").config();
 
 const { newsRouter, authRouter } = require("./routes/api");
@@ -25,6 +27,7 @@ app.use("/api/auth", authRouter);
 app.use("/api/link", (req, res) => {
   res.sendFile(path.join(__dirname, "./public/index.html"));
 }); // Temp to del
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });
