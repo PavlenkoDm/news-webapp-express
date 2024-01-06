@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "version": "1.0.0",
+    "version": "1.0.1",
     "title": "NEWS-WEBAPP-EXPRESS API",
     "description": "NEWS-WEBAPP-EXPRESS API Documentation",
     "license": {
@@ -275,123 +275,471 @@
     "/api/auth/update-password": {
       "patch": {
         "tags": ["Auth"],
-        "summary": "",
+        "summary": "Update user password",
         "parameters": [],
-        "description": "**Sending request for assistance**",
+        "description": "# Changing user's password\n \nIn headers must be access token.",
         "security": [
           {
             "Bearer": []
           }
         ],
         "requestBody": {
-          "description": "Comment and email",
+          "description": "# Body description queries:\n\n**newPassword** - string, user new password.\n\n**oldPassword** - string, user previous password.",
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/HelpRequest"
+                "$ref": "#/components/schemas/UpdateUserPasswordRequest"
               }
             }
           }
         },
         "responses": {
-          "400": {
-            "description": "Error. Email required or Error. Comment required",
-            "content": {}
-          },
           "200": {
             "description": "Successful operation",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HelpResponse"
+                  "$ref": "#/components/schemas/UpdateUserPasswordResponse"
                 }
               }
             }
+          },
+          "400": {
+            "description": "Error. Password incorrect",
+            "content": {}
+          },
+          "404": {
+            "description": "Error. User not found",
+            "content": {}
+          },
+          "401": {
+            "description": "Error. No Bearer / No token / Access token did not pass verification / Not authorized(auth middleware)",
+            "content": {}
+          },
+          "500": {
+            "description": "Error. Database processing is failed",
+            "content": {}
           }
         }
       }
     },
 
-    "/api/users/current": {
-      "get": {
-        "tags": ["News"],
-        "summary": "Get current user info",
+    "/api/auth/update-theme": {
+      "patch": {
+        "tags": ["Auth"],
+        "summary": "Update user theme",
         "parameters": [],
-        "description": "**Authorization token must be included**",
+        "description": "# Changing user's theme\n \nIn headers must be access token.",
         "security": [
           {
             "Bearer": []
           }
         ],
         "requestBody": {
-          "description": "User's token",
+          "description": "# Body description queries:\n\n**updatedTheme** - string, user new theme(light / dark).",
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CurrentUserRequest"
+                "$ref": "#/components/schemas/UpdateUserThemeRequest"
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "Ok",
+            "description": "Successful operation",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CurrentUserResponse"
+                  "$ref": "#/components/schemas/UpdateUserThemeResponse"
                 }
               }
             }
           },
+          "404": {
+            "description": "Error. User not found",
+            "content": {}
+          },
           "401": {
-            "description": "Not authorized",
+            "description": "Error. No Bearer / No token / Access token did not pass verification / Not authorized(auth middleware)",
+            "content": {}
+          },
+          "500": {
+            "description": "Error. Database processing is failed",
             "content": {}
           }
         }
       }
     },
-    "/api/users": {
-      "patch": {
-        "tags": ["News"],
-        "summary": "Update current user info",
+
+    "/api/auth/forgot-password-request": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Restore user access to account",
         "parameters": [],
-        "description": "**Authorization token must be included**",
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
+        "description": "# To restore user access to account\n \nIn body must be actual and valid email.",
         "requestBody": {
-          "description": "New avatar or or new password, email",
+          "description": "# Body description queries:\n\n**email** - string, user's email.",
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UserUpdateRequest"
+                "$ref": "#/components/schemas/ForgotPasswordRequest"
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "Update success",
+            "description": "Successful operation",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UpdateUserResponse"
+                  "$ref": "#/components/schemas/ForgotPasswordResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error. User not found",
+            "content": {}
+          }
+        }
+      }
+    },
+
+    "/api/auth/forgot-password-change": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Set new password",
+        "parameters": [],
+        "description": "# To set new password\n \nIn headers must be token.",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "requestBody": {
+          "description": "# Body description queries:\n \n**newPassword** - string, user's new password.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForgotPasswordChangeRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForgotPasswordChangeResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error. All sign-in fields are required and must be filled in with correct values",
+            "content": {}
+          },
+          "401": {
+            "description": "Error. No Bearer / No token / Access token did not pass verification / Not authorized",
+            "content": {}
+          },
+          "500": {
+            "description": "Error. Database processing is failed",
+            "content": {}
+          }
+        }
+      }
+    },
+
+    "/api/auth/google": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "Redirect to google",
+        "parameters": [],
+        "description": "# Just redirect to google"
+      }
+    },
+    "/api/auth/google-redirect": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "Processing data from Google",
+        "parameters": [],
+        "description": "# Processing data from Google",
+        "responses": {
+          "302": {
+            "description": "Successful operation. Redirect to the main page https://news-portal-refactor.vercel.app with tokens in query parameters"
+          },
+          "401": {
+            "description": "Error. User is not authentified",
+            "content": {}
+          },
+          "500": {
+            "description": "Error. Database processing is failed",
+            "content": {}
+          }
+        }
+      }
+    },
+
+    "/api/news": {
+      "get": {
+        "tags": ["News"],
+        "summary": "Get all news",
+        "parameters": [],
+        "description": "# Get all the news of a registered user\n \nIn headers must be access token.",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAllNewsResponse"
                 }
               }
             }
           },
           "401": {
-            "description": "Not authorized",
+            "description": "Error. Unauthorized / No Bearer / No token / Access token did not pass verification / Not authorized(auth middleware)",
             "content": {}
           },
           "500": {
-            "description": "Error updating user",
+            "description": "Error. Database processing is failed",
+            "content": {}
+          }
+        }
+      }
+    },
+
+    "/api/news/": {
+      "post": {
+        "tags": ["News"],
+        "summary": "Add news to database",
+        "parameters": [],
+        "description": "# Add news to database\n \nIn headers must be access access token.",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "requestBody": {
+          "description": "# Body description queries:\n \n**Array of the news objects**",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PostNewsRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PostNewsResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Error. Unauthorized / No Bearer / No token / Access token did not pass verification / Not authorized(auth middleware)",
+            "content": {}
+          },
+          "500": {
+            "description": "Error. Database processing is failed",
+            "content": {}
+          }
+        }
+      }
+    },
+
+    "/api/news/favourite": {
+      "get": {
+        "tags": ["News"],
+        "summary": "Get favourite news",
+        "parameters": [],
+        "description": "# Get all favourite news from database\n \nIn headers must be access token.",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetFavouriteNewsResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Error. Unauthorized / No Bearer / No token / Access token did not pass verification / Not authorized(auth middleware)",
+            "content": {}
+          },
+          "500": {
+            "description": "Error. Database processing is failed",
+            "content": {}
+          }
+        }
+      }
+    },
+
+    "/api/news/read": {
+      "get": {
+        "tags": ["News"],
+        "summary": "Get news that has been read",
+        "parameters": [],
+        "description": "# Get all read news from database\n \nIn headers must be access token.",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetReadNewsResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Error. Unauthorized / No Bearer / No token / Access token did not pass verification / Not authorized(auth middleware)",
+            "content": {}
+          },
+          "500": {
+            "description": "Error. Database processing is failed",
+            "content": {}
+          }
+        }
+      }
+    },
+
+    "/api/news/history-log": {
+      "get": {
+        "tags": ["News"],
+        "summary": "Get history-log",
+        "parameters": [],
+        "description": "# Get history-log of deleted news from archive\n \nIn headers must be access token.",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetHistoryLogResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Error. Unauthorized / No Bearer / No token / Access token did not pass verification / Not authorized(auth middleware)",
+            "content": {}
+          },
+          "500": {
+            "description": "Error. Database processing is failed",
+            "content": {}
+          }
+        }
+      }
+    },
+
+    "/api/news/archive": {
+      "get": {
+        "tags": ["News"],
+        "summary": "Get archive news",
+        "parameters": [],
+        "description": "# Get all archive news from database\n \nIn headers must be access token.",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetArchiveNewsResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Error. Unauthorized / No Bearer / No token / Access token did not pass verification / Not authorized(auth middleware)",
+            "content": {}
+          },
+          "500": {
+            "description": "Error. Database processing is failed",
+            "content": {}
+          }
+        }
+      }
+    },
+
+    "/api/news/archive/:id": {
+      "delete": {
+        "tags": ["News"],
+        "summary": "Delete archive news item by id",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string",
+            "description": "ID of the news item"
+          }
+        ],
+        "description": "# Delete archive news from database\n \nIn headers must be access token.",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteArchiveNewsResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Error. Unauthorized / No Bearer / No token / Access token did not pass verification / Not authorized(auth middleware)",
+            "content": {}
+          },
+          "500": {
+            "description": "Error. Database processing is failed",
             "content": {}
           }
         }
@@ -631,7 +979,22 @@
         }
       },
 
-      "DragAndDropResponse": {
+      "UpdateUserPasswordRequest": {
+        "type": "object",
+        "properties": {
+          "newPassword": {
+            "type": "string",
+            "description": "User's new password",
+            "example": "BlaBlaBla951"
+          },
+          "oldPassword": {
+            "type": "string",
+            "description": "User's previous password",
+            "example": "AbraCadabra123"
+          }
+        }
+      },
+      "UpdateUserPasswordResponse": {
         "type": "object",
         "properties": {
           "code": {
@@ -641,12 +1004,21 @@
           },
           "message": {
             "type": "string",
-            "description": "New column position",
-            "example": "Update position column"
+            "example": "Password is successfully updated"
           }
         }
       },
-      "DragAndDropResponseTask": {
+
+      "UpdateUserThemeRequest": {
+        "type": "object",
+        "properties": {
+          "updatedTheme": {
+            "type": "string",
+            "example": "light"
+          }
+        }
+      },
+      "UpdateUserThemeResponse": {
         "type": "object",
         "properties": {
           "code": {
@@ -656,412 +1028,645 @@
           },
           "message": {
             "type": "string",
-            "description": "Update position task ",
-            "example": "Update position task "
+            "example": "Theme is successfully updated"
+          },
+          "userTheme": {
+            "type": "string",
+            "example": "light"
           }
         }
       },
-      "MoveTasktoColumn": {
+
+      "ForgotPasswordRequest": {
         "type": "object",
         "properties": {
-          "idTask": {
+          "email": {
             "type": "string",
-            "description": "Task id",
-            "example": "64cb959c72ea7093c67658a2"
-          },
-          "idColumnNew": {
+            "description": "User's email",
+            "example": "joonsnow@gmail.com"
+          }
+        }
+      },
+      "ForgotPasswordResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
             "type": "string",
-            "description": "Id of new Column",
-            "example": "64cb87380bd2f83e83f216b9"
+            "description": "code",
+            "example": "200"
           },
-          "dataOld": {
+          "message": {
+            "type": "string",
+            "example": "Email sent successfully"
+          }
+        }
+      },
+
+      "ForgotPasswordChangeRequest": {
+        "type": "object",
+        "properties": {
+          "newPassword": {
+            "type": "string",
+            "description": "User's new password",
+            "example": "BlaBlaBla951"
+          }
+        }
+      },
+      "ForgotPasswordChangeResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "http",
+            "example": "200"
+          },
+          "message": {
+            "type": "string",
+            "example": "User sign-in success"
+          },
+          "user": {
             "type": "object",
             "properties": {
               "id": {
-                "type": "string",
-                "description": "Task id",
-                "example": "64cb8603ccecc89b385e073f"
+                "type": "string"
               },
-              "order": {
-                "type": "http",
-                "description": "Task order",
-                "example": "6"
+              "name": {
+                "type": "string",
+                "description": "User's name",
+                "example": "Joon Snow"
+              },
+              "email": {
+                "type": "string",
+                "description": "User's email",
+                "example": "joonsnow@gmail.com",
+                "format": "email"
               }
             }
           },
-          "dataNew": {
-            "type": "object",
-            "properties": {
-              "id": {
-                "type": "string",
-                "description": "Task id",
-                "example": "64cb8603ccecc89b385e073f"
-              },
-              "order": {
-                "type": "http",
-                "description": "Task order",
-                "example": "6"
-              }
-            }
-          }
-        }
-      },
-      "HelpRequest": {
-        "type": "object",
-        "properties": {
-          "comment": {
+          "userTheme": {
             "type": "string",
-            "description": "Issue",
-            "example": "theme is not working"
+            "description": "User's aplication theme",
+            "example": "dark"
           },
-          "email": {
+          "accessToken": {
             "type": "string",
-            "description": "Email",
-            "example": "johnWick@gmail.com"
+            "description": "User's access token"
+          },
+          "refreshToken": {
+            "type": "string",
+            "description": "User's refresh token"
           }
         }
       },
-      "HelpResponse": {
+
+      "GetAllNewsResponse": {
         "type": "object",
         "properties": {
           "code": {
-            "type": "string",
-            "description": "code",
+            "type": "http",
             "example": "200"
           },
           "message": {
             "type": "string",
-            "description": "Send Email",
-            "example": "johnWick@gmail.com"
+            "example": "Get all news success"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "isFavourite": {
+                  "type": "boolean",
+                  "example": "true"
+                },
+                "hasRead": {
+                  "type": "boolean",
+                  "example": "false"
+                },
+                "title": {
+                  "type": "string",
+                  "description": "Title of the news",
+                  "example": "The Best Teams That Money Could Buy"
+                },
+                "publishDate": {
+                  "type": "string",
+                  "example": "31/12/2023"
+                },
+                "description": {
+                  "type": "string",
+                  "description": "Short description of the news",
+                  "example": "The four teams in the College Football Playoff used cash payments from fan “collectives” in unique ways to build their rosters."
+                },
+                "edition": {
+                  "type": "string",
+                  "description": "Publishing house",
+                  "example": "New York Times"
+                },
+                "author": {
+                  "type": "string",
+                  "description": "Author of the news",
+                  "example": "David A. Fahrenthold and Billy Witz"
+                },
+                "category": {
+                  "type": "string",
+                  "description": "What category does the news belong to?",
+                  "example": "U.S."
+                },
+                "imgLink": {
+                  "type": "string",
+                  "description": "Link to image",
+                  "example": "https://static01.nyt.com/images/2023/12/31/multimedia/31nat-ncaa-nil-jtwb/31nat-ncaa-nil-jtwb-mediumThreeByTwo440.jpg"
+                },
+                "imgAlt": {
+                  "type": "string",
+                  "description": "Image description",
+                  "example": "The Texas Longhorns at a game against the Iowa State Cyclones in November. Texas plan to pay linemen helped set precedents for collectives."
+                },
+                "newsUrl": {
+                  "type": "string",
+                  "description": "Link to the original news",
+                  "example": "https://www.nytimes.com/2023/12/31/us/college-athletes-nil-sugar-rose-bowl.html"
+                },
+                "materialType": {
+                  "type": "string",
+                  "description": "Type of the material",
+                  "example": "Article"
+                },
+                "additionDate": {
+                  "type": "number",
+                  "description": "The date the news item was added to favorites or read.",
+                  "example": "1704213699331"
+                }
+              }
+            }
           }
         }
       },
-      "UserUpdateRequest": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "description": "New name",
-            "example": "John Wick"
-          },
-          "email": {
-            "type": "string",
-            "description": "New email",
-            "example": "johnWick@gmail.com"
-          },
-          "password": {
-            "type": "string",
-            "description": "New password",
-            "example": "123456"
-          }
-        }
-      },
-      "UpdateUserResponse": {
-        "type": "object",
-        "properties": {
-          "message": {
-            "type": "string",
-            "description": "Updated user",
-            "example": "Update success"
-          },
+
+      "PostNewsRequest": {
+        "type": "array",
+        "items": {
           "type": "object",
           "properties": {
-            "name": {
-              "type": "string",
-              "description": "New name",
-              "example": "John Wick"
+            "isFavourite": {
+              "type": "boolean",
+              "example": "true"
             },
-            "email": {
-              "type": "string",
-              "description": "New email",
-              "example": "johnWick@gmail.com"
+            "hasRead": {
+              "type": "boolean",
+              "example": "false"
             },
-            "theme": {
+            "title": {
               "type": "string",
-              "description": "theme",
-              "example": "violet"
+              "description": "Title of the news",
+              "example": "The Best Teams That Money Could Buy"
             },
-            "avatarURL": {
+            "publishDate": {
               "type": "string",
-              "description": "New avatar",
-              "example": ""
+              "example": "31/12/2023"
+            },
+            "description": {
+              "type": "string",
+              "description": "Short description of the news",
+              "example": "The four teams in the College Football Playoff used cash payments from fan “collectives” in unique ways to build their rosters."
+            },
+            "edition": {
+              "type": "string",
+              "description": "Publishing house",
+              "example": "New York Times"
+            },
+            "author": {
+              "type": "string",
+              "description": "Author of the news",
+              "example": "David A. Fahrenthold and Billy Witz"
+            },
+            "category": {
+              "type": "string",
+              "description": "What category does the news belong to?",
+              "example": "U.S."
+            },
+            "imgLink": {
+              "type": "string",
+              "description": "Link to image",
+              "example": "https://static01.nyt.com/images/2023/12/31/multimedia/31nat-ncaa-nil-jtwb/31nat-ncaa-nil-jtwb-mediumThreeByTwo440.jpg"
+            },
+            "imgAlt": {
+              "type": "string",
+              "description": "Image description",
+              "example": "The Texas Longhorns at a game against the Iowa State Cyclones in November. Texas plan to pay linemen helped set precedents for collectives."
+            },
+            "newsUrl": {
+              "type": "string",
+              "description": "Link to the original news",
+              "example": "https://www.nytimes.com/2023/12/31/us/college-athletes-nil-sugar-rose-bowl.html"
+            },
+            "materialType": {
+              "type": "string",
+              "description": "Type of the material",
+              "example": "Article"
+            },
+            "additionDate": {
+              "type": "number",
+              "description": "The date the news item was added to favorites or read.",
+              "example": "1704213699331"
             }
           }
         }
       },
-      "Id": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "User id",
-            "example": "64cb8603ccecc89b385e073f"
-          }
-        }
-      },
-      "BoardId": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "User id",
-            "example": "64cb8603ccecc89b385e073f"
-          }
-        }
-      },
-      "AllBoardsResponse": {
+      "PostNewsResponse": {
         "type": "object",
         "properties": {
           "code": {
             "type": "http",
-            "description": "Code",
-            "example": "200"
+            "example": "201"
           },
           "message": {
             "type": "string",
-            "description": "Response message",
-            "example": "Success"
+            "example": "Add news success"
           },
-          "boards": {
-            "type": "object",
-            "properties": {
-              "title": {
-                "example": "Task",
-                "description": "Board title"
-              },
-              "icon": {
-                "example": "icon-Project",
-                "description": "Board icon"
-              },
-              "background": {
-                "example": "empty",
-                "description": "Board background"
-              },
-              "user": {
-                "example": "Exk_soSUARn-t-7FDQKsiFBTutt_vc9ok9UPuTdGqBU",
-                "description": "Board owner "
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "isFavourite": {
+                  "type": "boolean",
+                  "example": "true"
+                },
+                "hasRead": {
+                  "type": "boolean",
+                  "example": "false"
+                },
+                "title": {
+                  "type": "string",
+                  "description": "Title of the news",
+                  "example": "The Best Teams That Money Could Buy"
+                },
+                "publishDate": {
+                  "type": "string",
+                  "example": "31/12/2023"
+                },
+                "description": {
+                  "type": "string",
+                  "description": "Short description of the news",
+                  "example": "The four teams in the College Football Playoff used cash payments from fan “collectives” in unique ways to build their rosters."
+                },
+                "edition": {
+                  "type": "string",
+                  "description": "Publishing house",
+                  "example": "New York Times"
+                },
+                "author": {
+                  "type": "string",
+                  "description": "Author of the news",
+                  "example": "David A. Fahrenthold and Billy Witz"
+                },
+                "category": {
+                  "type": "string",
+                  "description": "What category does the news belong to?",
+                  "example": "U.S."
+                },
+                "imgLink": {
+                  "type": "string",
+                  "description": "Link to image",
+                  "example": "https://static01.nyt.com/images/2023/12/31/multimedia/31nat-ncaa-nil-jtwb/31nat-ncaa-nil-jtwb-mediumThreeByTwo440.jpg"
+                },
+                "newsUrl": {
+                  "type": "string",
+                  "description": "Link to the original news",
+                  "example": "https://www.nytimes.com/2023/12/31/us/college-athletes-nil-sugar-rose-bowl.html"
+                },
+                "additionDate": {
+                  "type": "number",
+                  "description": "The date the news item was added to favorites or read.",
+                  "example": "1704213699331"
+                }
               }
             }
           }
         }
       },
-      "BoardResponse": {
+
+      "GetFavouriteNewsResponse": {
         "type": "object",
         "properties": {
           "code": {
             "type": "http",
-            "description": "Code",
             "example": "200"
           },
           "message": {
             "type": "string",
-            "description": "Response message",
-            "example": "Success"
+            "example": "Get favourite news success"
           },
-          "board": {
-            "type": "string",
-            "description": "Board id",
-            "example": "64cb8603ccecc89b385e073f"
-          },
-          "column": {
-            "type": "string",
-            "description": "Column id",
-            "example": "64cb8603ccecc89b385e073f"
-          },
-          "cards": {
-            "type": "string",
-            "description": "cards id",
-            "example": "64cb8603ccecc89b385e073f"
-          }
-        }
-      },
-      "AddBoard": {
-        "type": "object",
-        "properties": {
-          "code": {
-            "type": "http",
-            "description": "Code",
-            "example": "201"
-          },
-          "message": {
-            "type": "string",
-            "description": "Response message",
-            "example": "Success"
-          },
-          "newBoard": {
-            "type": "object",
-            "description": "New Board",
-            "example": "{}"
-          }
-        }
-      },
-      "UpdateBoard": {
-        "type": "object",
-        "properties": {
-          "code": {
-            "type": "http",
-            "description": "Code",
-            "example": "201"
-          },
-          "result": {
-            "type": "object",
-            "description": "New Board",
-            "example": "{}"
-          }
-        }
-      },
-      "DeletedBoard": {
-        "type": "object",
-        "properties": {
-          "code": {
-            "type": "http",
-            "description": "Code",
-            "example": "201"
-          },
-          "message": {
-            "type": "string",
-            "description": "Response message",
-            "example": "Board delete success"
-          }
-        }
-      },
-      "DeletedColumn": {
-        "type": "object",
-        "properties": {
-          "code": {
-            "type": "http",
-            "description": "Code",
-            "example": "201"
-          },
-          "message": {
-            "type": "string",
-            "description": "Response message",
-            "example": "Column delete success"
-          }
-        }
-      },
-      "GetColumn": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "Column id",
-            "example": "64cb8603ccecc89b385e073f"
-          }
-        }
-      },
-      "ColumnResponse": {
-        "type": "object",
-        "properties": {
-          "code": {
-            "type": "http",
-            "description": "Code",
-            "example": "200"
-          },
-          "message": {
-            "type": "string",
-            "description": "Response message",
-            "example": "Success"
-          },
-          "column": {
-            "type": "string",
-            "description": "Column ids",
-            "example": "64cb8603ccecc89b385e073f"
-          }
-        }
-      },
-      "NewColumnResponse": {
-        "type": "object",
-        "properties": {
-          "code": {
-            "type": "http",
-            "description": "Code",
-            "example": "200"
-          },
-          "result": {
-            "type": "string",
-            "description": "new column",
-            "example": "{}"
-          }
-        }
-      },
-      "NewColumnRequest": {
-        "type": "object",
-        "properties": {
-          "title": {
-            "type": "string",
-            "description": "Project name",
-            "example": "TaskPro Project"
-          },
-          "columnOwner": {
-            "type": "string",
-            "description": "Board id",
-            "example": "64cb8603ccecc89b385e073f"
-          },
-          "orderColumn": {
-            "type": "string",
-            "description": "Number",
-            "example": "5"
-          }
-        }
-      },
-      "CardResponse": {
-        "type": "object",
-        "properties": {
-          "code": {
-            "type": "http",
-            "description": "Code",
-            "example": "200"
-          },
-          "message": {
-            "type": "string",
-            "description": "Response message",
-            "example": "Success"
-          },
-          "card": {
-            "type": "object",
-            "properties": {
-              "title": {
-                "type": "string",
-                "description": "Card Name",
-                "example": "Create a "
-              },
-              "message": {
-                "type": "string",
-                "description": "Response message",
-                "example": "Success"
-              },
-              "column": {
-                "type": "string",
-                "description": "Column ids",
-                "example": "64cb8603ccecc89b385e073f"
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "isFavourite": {
+                  "type": "boolean",
+                  "example": "true"
+                },
+                "hasRead": {
+                  "type": "boolean",
+                  "example": "false"
+                },
+                "title": {
+                  "type": "string",
+                  "description": "Title of the news",
+                  "example": "The Best Teams That Money Could Buy"
+                },
+                "publishDate": {
+                  "type": "string",
+                  "example": "31/12/2023"
+                },
+                "description": {
+                  "type": "string",
+                  "description": "Short description of the news",
+                  "example": "The four teams in the College Football Playoff used cash payments from fan “collectives” in unique ways to build their rosters."
+                },
+                "edition": {
+                  "type": "string",
+                  "description": "Publishing house",
+                  "example": "New York Times"
+                },
+                "author": {
+                  "type": "string",
+                  "description": "Author of the news",
+                  "example": "David A. Fahrenthold and Billy Witz"
+                },
+                "category": {
+                  "type": "string",
+                  "description": "What category does the news belong to?",
+                  "example": "U.S."
+                },
+                "imgLink": {
+                  "type": "string",
+                  "description": "Link to image",
+                  "example": "https://static01.nyt.com/images/2023/12/31/multimedia/31nat-ncaa-nil-jtwb/31nat-ncaa-nil-jtwb-mediumThreeByTwo440.jpg"
+                },
+                "imgAlt": {
+                  "type": "string",
+                  "description": "Image description",
+                  "example": "The Texas Longhorns at a game against the Iowa State Cyclones in November. Texas plan to pay linemen helped set precedents for collectives."
+                },
+                "newsUrl": {
+                  "type": "string",
+                  "description": "Link to the original news",
+                  "example": "https://www.nytimes.com/2023/12/31/us/college-athletes-nil-sugar-rose-bowl.html"
+                },
+                "materialType": {
+                  "type": "string",
+                  "description": "Type of the material",
+                  "example": "Article"
+                },
+                "additionDate": {
+                  "type": "number",
+                  "description": "The date the news item was added to favorites or read.",
+                  "example": "1704213699331"
+                }
               }
             }
           }
         }
       },
-      "CardDeleteResponse": {
+
+      "GetReadNewsResponse": {
         "type": "object",
         "properties": {
           "code": {
             "type": "http",
-            "description": "Code",
             "example": "200"
           },
           "message": {
             "type": "string",
-            "description": "Task delete success",
-            "example": "Task delete success"
+            "example": "Get has read news success"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "isFavourite": {
+                  "type": "boolean",
+                  "example": "false"
+                },
+                "hasRead": {
+                  "type": "boolean",
+                  "example": "true"
+                },
+                "title": {
+                  "type": "string",
+                  "description": "Title of the news",
+                  "example": "The Best Teams That Money Could Buy"
+                },
+                "publishDate": {
+                  "type": "string",
+                  "example": "31/12/2023"
+                },
+                "description": {
+                  "type": "string",
+                  "description": "Short description of the news",
+                  "example": "The four teams in the College Football Playoff used cash payments from fan “collectives” in unique ways to build their rosters."
+                },
+                "edition": {
+                  "type": "string",
+                  "description": "Publishing house",
+                  "example": "New York Times"
+                },
+                "author": {
+                  "type": "string",
+                  "description": "Author of the news",
+                  "example": "David A. Fahrenthold and Billy Witz"
+                },
+                "category": {
+                  "type": "string",
+                  "description": "What category does the news belong to?",
+                  "example": "U.S."
+                },
+                "imgLink": {
+                  "type": "string",
+                  "description": "Link to image",
+                  "example": "https://static01.nyt.com/images/2023/12/31/multimedia/31nat-ncaa-nil-jtwb/31nat-ncaa-nil-jtwb-mediumThreeByTwo440.jpg"
+                },
+                "imgAlt": {
+                  "type": "string",
+                  "description": "Image description",
+                  "example": "The Texas Longhorns at a game against the Iowa State Cyclones in November. Texas plan to pay linemen helped set precedents for collectives."
+                },
+                "newsUrl": {
+                  "type": "string",
+                  "description": "Link to the original news",
+                  "example": "https://www.nytimes.com/2023/12/31/us/college-athletes-nil-sugar-rose-bowl.html"
+                },
+                "materialType": {
+                  "type": "string",
+                  "description": "Type of the material",
+                  "example": "Article"
+                },
+                "additionDate": {
+                  "type": "number",
+                  "description": "The date the news item was added to favorites or read.",
+                  "example": "1704213699331"
+                }
+              }
+            }
           }
         }
       },
-      "Email": {
+
+      "GetArchiveNewsResponse": {
         "type": "object",
         "properties": {
-          "email": {
+          "code": {
+            "type": "http",
+            "example": "200"
+          },
+          "message": {
             "type": "string",
-            "description": "Email",
-            "example": "johnWick@gmail.com"
+            "example": "Get archive news success"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "string",
+                  "example": "65997c1b2ea2a71a985c1826"
+                },
+                "isFavourite": {
+                  "type": "boolean",
+                  "example": "false"
+                },
+                "hasRead": {
+                  "type": "boolean",
+                  "example": "true"
+                },
+                "title": {
+                  "type": "string",
+                  "description": "Title of the news",
+                  "example": "The Best Teams That Money Could Buy"
+                },
+                "publishDate": {
+                  "type": "string",
+                  "example": "31/12/2023"
+                },
+                "description": {
+                  "type": "string",
+                  "description": "Short description of the news",
+                  "example": "The four teams in the College Football Playoff used cash payments from fan “collectives” in unique ways to build their rosters."
+                },
+                "edition": {
+                  "type": "string",
+                  "description": "Publishing house",
+                  "example": "New York Times"
+                },
+                "author": {
+                  "type": "string",
+                  "description": "Author of the news",
+                  "example": "David A. Fahrenthold and Billy Witz"
+                },
+                "category": {
+                  "type": "string",
+                  "description": "What category does the news belong to?",
+                  "example": "U.S."
+                },
+                "imgLink": {
+                  "type": "string",
+                  "description": "Link to image",
+                  "example": "https://static01.nyt.com/images/2023/12/31/multimedia/31nat-ncaa-nil-jtwb/31nat-ncaa-nil-jtwb-mediumThreeByTwo440.jpg"
+                },
+                "imgAlt": {
+                  "type": "string",
+                  "description": "Image description",
+                  "example": "The Texas Longhorns at a game against the Iowa State Cyclones in November. Texas plan to pay linemen helped set precedents for collectives."
+                },
+                "newsUrl": {
+                  "type": "string",
+                  "description": "Link to the original news",
+                  "example": "https://www.nytimes.com/2023/12/31/us/college-athletes-nil-sugar-rose-bowl.html"
+                },
+                "materialType": {
+                  "type": "string",
+                  "description": "Type of the material",
+                  "example": "Article"
+                },
+                "additionDate": {
+                  "type": "number",
+                  "description": "The date the news item was added to favorites or read.",
+                  "example": "1704213699331"
+                }
+              }
+            }
+          }
+        }
+      },
+
+      "DeleteArchiveNewsResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "http",
+            "example": "200"
+          },
+          "message": {
+            "type": "string",
+            "example": "Remove news success"
+          },
+          "_id": {
+            "type": "string",
+            "example": "65997c1b2ea2a71a985c1826"
+          }
+        }
+      },
+
+      "GetHistoryLogResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "http",
+            "example": "200"
+          },
+          "message": {
+            "type": "string",
+            "example": "Get history-log success"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "string",
+                  "example": "65997c1b2ea2a71a985c1826"
+                },
+                "title": {
+                  "type": "string",
+                  "description": "Title of the news",
+                  "example": "The Best Teams That Money Could Buy"
+                },
+                "category": {
+                  "type": "string",
+                  "description": "What category does the news belong to?",
+                  "example": "U.S."
+                },
+                "newsUrl": {
+                  "type": "string",
+                  "description": "Link to the original news",
+                  "example": "https://www.nytimes.com/2023/12/31/us/college-athletes-nil-sugar-rose-bowl.html"
+                },
+                "additionDate": {
+                  "type": "number",
+                  "description": "The date the news item was added to favorites or read.",
+                  "example": "1704213699331"
+                },
+                "deletionDate": {
+                  "type": "number",
+                  "description": "The date the news item was deleted from archive.",
+                  "example": "1704213699553"
+                }
+              }
+            }
           }
         }
       }
