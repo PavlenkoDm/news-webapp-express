@@ -1,5 +1,6 @@
 const app = require("./app");
 const mongoose = require("mongoose");
+const { clientRedis } = require("./configs");
 
 const { DB_HOST, PORT } = process.env;
 
@@ -11,6 +12,12 @@ mongoose
     useUnifiedTopology: true,
   })
   .then(() => {
+    clientRedis
+      .on("error", err => console.log("Redis Client Error", err))
+      .connect()
+      .then(() => {
+        console.log("Redis server running...");
+      });
     app.listen(PORT, () => {
       console.log(`Server is running... Use API on port: ${PORT}`);
     });
