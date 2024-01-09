@@ -1,5 +1,6 @@
 const { News, Archive } = require("../models");
-const { dbFailure, httpError } = require("../helpers");
+const { dbFailure, httpError, redisSetData } = require("../helpers");
+const { clientRedis } = require("../configs");
 
 const period = 1296000000; // 86400000(сутки) 600000(десять минут) 1800000 (полчаса)
 
@@ -67,6 +68,13 @@ const toArchiveOldNews = async (req, res, next) => {
     }
     const removedNews = await News.findOneAndRemove({ newsUrl: news.newsUrl });
     if (!removedNews) dbFailure();
+  }
+
+  const archiveCache = await clientRedis.exists(`Cached archive news ${id}`);
+  if (archiveCache) {
+    const data = await Archive.find({ newsOwner: id }, "-createdAt -updatedAt -newsOwner");
+    if (!data) dbFailure();
+    await redisSetData(`Cached archive news ${id}`, data);
   }
 
   next();

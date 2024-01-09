@@ -1,4 +1,4 @@
-const { dbFailure, modifyDBResponse } = require("../../helpers");
+const { dbFailure, modifyDBResponse, redisSetData } = require("../../helpers");
 const { News } = require("../../models");
 
 const postNews = async (req, res) => {
@@ -20,6 +20,13 @@ const postNews = async (req, res) => {
   }
 
   const modifiedPostedNews = modifyDBResponse(postedNews);
+
+  const favouriteNews = req.body.filter(({ isFavourite }) => isFavourite);
+  const readNews = req.body.filter(({ hasRead }) => hasRead);
+
+  await redisSetData(`Cached all news ${id}`, req.body);
+  await redisSetData(`Cached favourite news ${id}`, favouriteNews);
+  await redisSetData(`Cached has read news ${id}`, readNews);
 
   res.status(201);
   res.json({
