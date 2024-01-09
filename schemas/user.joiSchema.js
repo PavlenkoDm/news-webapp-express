@@ -24,7 +24,7 @@ const updateUserEmailShema = Joi.object({
 
 const updateUserPasswordShema = Joi.object({
   newPassword: Joi.string().required(),
-  oldPassword: Joi.string().required(),
+  password: Joi.string().required(),
 });
 
 const updateThemeSchema = Joi.object({
