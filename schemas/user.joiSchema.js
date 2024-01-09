@@ -18,8 +18,8 @@ const refreshUserSchema = Joi.object({
 });
 
 const updateUserEmailShema = Joi.object({
-  updatedEmail: Joi.string().pattern(emailRegexp).required(),
-  currentPassword: Joi.string().required(),
+  email: Joi.string().pattern(emailRegexp).required(),
+  password: Joi.string().required(),
 });
 
 const updateUserPasswordShema = Joi.object({
