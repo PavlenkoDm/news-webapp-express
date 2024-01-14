@@ -1,10 +1,12 @@
 const nodemailer = require("nodemailer");
 const { google } = require("googleapis");
+const { httpError } = require("../helpers");
 
 const { GOOGLE_SEND_EMAIL_CLIENT_ID, GOOGLE_SEND_EMAIL_CLIENT_SECRET, GOOGLE_SEND_EMAIL_REFRESH } =
   process.env;
 const REDIRECT_URI = "https://developers.google.com/oauthplayground";
-const BASE_URL_FRONTEND = "https://news-portal-refactor.vercel.app";
+const BASE_URL_FRONTEND = "http://localhost:5173"; // "https://news-portal-refactor.vercel.app";
+// "http://localhost:5173"
 
 const oAuth2Client = new google.auth.OAuth2(
   GOOGLE_SEND_EMAIL_CLIENT_ID,
@@ -46,6 +48,7 @@ async function sendMail(emailOfUser, passwordToken) {
     console.log("Email send success:", result);
   } catch (error) {
     console.error("Error sending message:", error);
+    throw httpError(500, "Sending failed");
   }
 }
 

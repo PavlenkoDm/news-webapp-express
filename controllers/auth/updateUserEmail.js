@@ -9,6 +9,7 @@ const updateUserEmail = async (req, res) => {
 
   const user = await User.findById(id, "-createdAt -updatedAt");
   if (!user) throw httpError(404, "User not found");
+  if (user.email === updatedEmail) throw httpError(400, "Email already in use");
 
   const passwordCompare = await bcrypt.compare(currentPassword, user.password);
   if (!passwordCompare) throw httpError(400, "Password incorrect");

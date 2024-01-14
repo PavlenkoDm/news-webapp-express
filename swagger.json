@@ -253,7 +253,7 @@
             }
           },
           "400": {
-            "description": "Error. Password incorrect",
+            "description": "Error. Password incorrect / Email already in use",
             "content": {}
           },
           "404": {

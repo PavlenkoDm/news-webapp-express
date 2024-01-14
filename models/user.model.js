@@ -29,6 +29,20 @@ const userSchema = new Schema(
       type: [String],
       default: [],
     },
+    haveAccounts: {
+      google: {
+        type: Boolean,
+        default: false,
+      },
+      facebook: {
+        type: Boolean,
+        default: false,
+      },
+      apple: {
+        type: Boolean,
+        default: false,
+      },
+    },
   },
   { versionKey: false, timestamps: true }
 );
