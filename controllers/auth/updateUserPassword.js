@@ -8,10 +8,14 @@ const updateUserPassword = async (req, res) => {
   const { newPassword, password: oldPassword } = req.body;
 
   const user = await User.findById(id, "-createdAt -updatedAt");
-  if (!user) throw httpError(404, "User not found");
+  if (!user) {
+    throw httpError(404, "User not found");
+  }
 
   const passwordCompare = await bcrypt.compare(oldPassword, user.password);
-  if (!passwordCompare) throw httpError(400, "Password incorrect");
+  if (!passwordCompare) {
+    throw httpError(400, "Password incorrect");
+  }
 
   const hashedNewPassword = await bcrypt.hash(newPassword, 10);
 
@@ -23,7 +27,9 @@ const updateUserPassword = async (req, res) => {
     createdAt: 0,
     updatedAt: 0,
   });
-  if (!updatedUser) dbFailure();
+  if (!updatedUser) {
+    dbFailure();
+  }
 
   res.status(200);
   res.json({

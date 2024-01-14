@@ -51,7 +51,9 @@ const signInUser = async (req, res) => {
       userEmail: userWithToken.email,
       refreshToken: [generatedRefreshToken],
     });
-    if (!newUserInRefresh) dbFailure();
+    if (!newUserInRefresh) {
+      dbFailure();
+    }
   } else {
     const currentDate = Date.now();
 

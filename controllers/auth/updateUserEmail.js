@@ -15,7 +15,9 @@ const updateUserEmail = async (req, res) => {
   }
 
   const passwordCompare = await bcrypt.compare(currentPassword, user.password);
-  if (!passwordCompare) throw httpError(400, "Password incorrect");
+  if (!passwordCompare) {
+    throw httpError(400, "Password incorrect");
+  }
 
   const updatedUser = await User.findByIdAndUpdate(
     id,
@@ -25,14 +27,18 @@ const updateUserEmail = async (req, res) => {
     createdAt: 0,
     updatedAt: 0,
   });
-  if (!updatedUser) dbFailure();
+  if (!updatedUser) {
+    dbFailure();
+  }
 
   const userInRefresh = await RefreshToken.findOneAndUpdate(
     { userEmail: user.email },
     { userEmail: updatedEmail },
     { new: true }
   );
-  if (!userInRefresh) dbFailure();
+  if (!userInRefresh) {
+    dbFailure();
+  }
 
   res.status(200);
   res.json({
