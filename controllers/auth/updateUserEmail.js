@@ -8,7 +8,9 @@ const updateUserEmail = async (req, res) => {
   const { email: updatedEmail, password: currentPassword } = req.body;
 
   const user = await User.findById(id, "-createdAt -updatedAt");
-  if (!user) throw httpError(404, "User not found");
+  if (!user) {
+    throw httpError(404, "User not found");
+  }
   const emailInBase = await User.findOne({ email: updatedEmail });
   if (user.email === updatedEmail || emailInBase.email === updatedEmail) {
     throw httpError(409, "Email already in use");
