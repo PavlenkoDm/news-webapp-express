@@ -39,6 +39,10 @@ const forgotPasswordChangeSchema = Joi.object({
   newPassword: Joi.string().required(),
 });
 
+const socialsBind = Joi.object({
+  email: Joi.string().pattern(emailRegexp).required(),
+});
+
 module.exports = {
   signUpSchema,
   signInSchema,
@@ -48,4 +52,5 @@ module.exports = {
   updateThemeSchema,
   forgotPasswordReqSchema,
   forgotPasswordChangeSchema,
+  socialsBind,
 };

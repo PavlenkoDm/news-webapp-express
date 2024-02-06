@@ -71,6 +71,12 @@ const signInUser = async (req, res) => {
     );
   }
 
+  const haveAccounts = {
+    google: Boolean(userWithToken.haveAccounts.google),
+    facebook: Boolean(userWithToken.haveAccounts.facebook),
+    apple: Boolean(userWithToken.haveAccounts.apple),
+  };
+
   res.status(200);
   res.json({
     code: 200,
@@ -83,6 +89,7 @@ const signInUser = async (req, res) => {
     userTheme: userWithToken.userTheme,
     accessToken: generatedAccessToken,
     refreshToken: generatedRefreshToken,
+    haveAccounts,
   });
 };
 

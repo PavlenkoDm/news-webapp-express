@@ -31,16 +31,16 @@ const userSchema = new Schema(
     },
     haveAccounts: {
       google: {
-        type: Boolean,
-        default: false,
+        type: String,
+        default: "",
       },
       facebook: {
-        type: Boolean,
-        default: false,
+        type: String,
+        default: "",
       },
       apple: {
-        type: Boolean,
-        default: false,
+        type: String,
+        default: "",
       },
     },
   },
