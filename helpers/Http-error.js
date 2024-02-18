@@ -9,7 +9,7 @@ const errorMessageList = {
 const httpError = (status, message = errorMessageList[status]) => {
   const error = new Error(message);
   error.status = status;
-  error.data = { status, message };
+  error.dataInfo = { status, message };
   return error;
 };
 
