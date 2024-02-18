@@ -19,7 +19,7 @@ const forgotPasswordChange = async (req, res, next) => {
   });
   if (!updatedUser) dbFailure();
 
-  req.body = { email: updatedUser.email, password: newPassword };
+  req.body = { email: updatedUser.email, password: newPassword, changePassword: true };
 
   next();
 };

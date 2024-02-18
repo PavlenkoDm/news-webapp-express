@@ -5,8 +5,7 @@ const { User, RefreshToken } = require("../../models");
 const { httpError, dbFailure, generateAccessRefreshTokens } = require("../../helpers");
 
 const signInUser = async (req, res) => {
-  console.log(req);
-  const { email, password } = req.body;
+  const { email, password, changePassword } = req.body;
   if (!password || !email) {
     throw httpError(400, "All sign-in fields are required");
   }
@@ -77,10 +76,12 @@ const signInUser = async (req, res) => {
     apple: Boolean(userWithToken.haveAccounts.apple),
   };
 
+  const toast = changePassword ? "Password has successfully changed" : "User sign-in success";
+
   res.status(200);
   res.json({
     code: 200,
-    message: "User sign-in success",
+    message: toast,
     user: {
       id: userWithToken._id,
       name: userWithToken.name,

@@ -13,6 +13,7 @@ const {
   updateThemeSchema,
   forgotPasswordReqSchema,
   forgotPasswordChangeSchema,
+  socialsBind,
 } = require("../../schemas");
 
 const {
@@ -27,6 +28,8 @@ const {
   updateUserTheme,
   forgotPasswordReq,
   forgotPasswordChange,
+  socialsAccBind,
+  socialsAccUnbind,
 } = require("../../controllers/auth");
 
 const { googleStrategy } = require("../../configs");
@@ -100,5 +103,14 @@ router.post(
   controllerWrapper(forgotPasswordChange),
   controllerWrapper(signInUser)
 );
+
+router.patch(
+  "/:socials/bind",
+  auth,
+  validateReqBody(socialsBind),
+  controllerWrapper(socialsAccBind)
+);
+
+router.patch("/:socials/unbind", auth, controllerWrapper(socialsAccUnbind));
 
 module.exports = router;

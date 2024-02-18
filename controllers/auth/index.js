@@ -9,6 +9,8 @@ const { updateUserPassword } = require("./updateUserPassword");
 const { updateUserTheme } = require("./updateUserTheme");
 const { forgotPasswordReq } = require("./forgotPasswordReq");
 const { forgotPasswordChange } = require("./forgotPasswordChange");
+const { socialsAccBind } = require("./socialsAccBind");
+const { socialsAccUnbind } = require("./socialsAccUnbind");
 
 module.exports = {
   signUpUser,
@@ -22,4 +24,6 @@ module.exports = {
   updateUserTheme,
   forgotPasswordReq,
   forgotPasswordChange,
+  socialsAccBind,
+  socialsAccUnbind,
 };
