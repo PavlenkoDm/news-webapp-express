@@ -43,6 +43,11 @@ const socialsBind = Joi.object({
   email: Joi.string().pattern(emailRegexp).required(),
 });
 
+const googleAuthSchema = Joi.object({
+  email: Joi.string().pattern(emailRegexp).required(),
+  sub: Joi.string().required(),
+});
+
 module.exports = {
   signUpSchema,
   signInSchema,
@@ -53,4 +58,5 @@ module.exports = {
   forgotPasswordReqSchema,
   forgotPasswordChangeSchema,
   socialsBind,
+  googleAuthSchema,
 };

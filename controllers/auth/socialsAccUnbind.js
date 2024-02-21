@@ -1,5 +1,5 @@
 const { User } = require("../../models");
-const { httpError, dbFailure } = require("../../helpers");
+const { httpError, dbFailure, transformToBool } = require("../../helpers");
 
 const socialsAccUnbind = async (req, res) => {
   const { _id } = req.user;
@@ -39,11 +39,7 @@ const socialsAccUnbind = async (req, res) => {
     }
   }
 
-  const haveAccounts = {
-    google: Boolean(updatedUser.haveAccounts.google),
-    facebook: Boolean(updatedUser.haveAccounts.facebook),
-    apple: Boolean(updatedUser.haveAccounts.apple),
-  };
+  const haveAccounts = transformToBool(updatedUser);
 
   res.status(200);
   res.json({

@@ -9,7 +9,9 @@ const signUpUser = async (req, res) => {
     throw httpError(400, "All sign-up fields are required");
   }
 
-  const user = await User.findOne({ email });
+  const user = await User.findOne({
+    $or: [{ email }, { "haveAccounts.google": email }],
+  });
   if (user) {
     throw httpError(409, "Email already in use");
   }

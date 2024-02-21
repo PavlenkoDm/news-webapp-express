@@ -11,6 +11,7 @@ const { forgotPasswordReq } = require("./forgotPasswordReq");
 const { forgotPasswordChange } = require("./forgotPasswordChange");
 const { socialsAccBind } = require("./socialsAccBind");
 const { socialsAccUnbind } = require("./socialsAccUnbind");
+const { googleAuth } = require("./googleAuth");
 
 module.exports = {
   signUpUser,
@@ -26,4 +27,5 @@ module.exports = {
   forgotPasswordChange,
   socialsAccBind,
   socialsAccUnbind,
+  googleAuth,
 };

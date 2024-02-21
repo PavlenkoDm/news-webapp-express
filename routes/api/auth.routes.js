@@ -14,6 +14,7 @@ const {
   forgotPasswordReqSchema,
   forgotPasswordChangeSchema,
   socialsBind,
+  googleAuthSchema,
 } = require("../../schemas");
 
 const {
@@ -30,6 +31,7 @@ const {
   forgotPasswordChange,
   socialsAccBind,
   socialsAccUnbind,
+  googleAuth,
 } = require("../../controllers/auth");
 
 const { googleStrategy } = require("../../configs");
@@ -112,5 +114,7 @@ router.patch(
 );
 
 router.patch("/:socials/unbind", auth, controllerWrapper(socialsAccUnbind));
+
+router.post("/google/auth", validateReqBody(googleAuthSchema), controllerWrapper(googleAuth));
 
 module.exports = router;

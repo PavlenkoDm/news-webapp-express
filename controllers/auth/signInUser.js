@@ -2,7 +2,12 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const { User, RefreshToken } = require("../../models");
-const { httpError, dbFailure, generateAccessRefreshTokens } = require("../../helpers");
+const {
+  httpError,
+  dbFailure,
+  generateAccessRefreshTokens,
+  transformToBool,
+} = require("../../helpers");
 
 const signInUser = async (req, res) => {
   const { email, password, changePassword } = req.body;
@@ -70,11 +75,7 @@ const signInUser = async (req, res) => {
     );
   }
 
-  const haveAccounts = {
-    google: Boolean(userWithToken.haveAccounts.google),
-    facebook: Boolean(userWithToken.haveAccounts.facebook),
-    apple: Boolean(userWithToken.haveAccounts.apple),
-  };
+  const haveAccounts = transformToBool(userWithToken);
 
   const toast = changePassword ? "Password has successfully changed" : "User sign-in success";
 

@@ -8,6 +8,7 @@ const parse = require("./parse");
 const stringify = require("./stringify");
 const redisGetData = require("./redisGetter");
 const redisSetData = require("./redisSetter");
+const transformToBool = require("./transformToBool");
 
 module.exports = {
   controllerWrapper,
@@ -20,4 +21,5 @@ module.exports = {
   stringify,
   redisGetData,
   redisSetData,
+  transformToBool,
 };

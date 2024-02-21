@@ -9,6 +9,7 @@ const {
   forgotPasswordReqSchema,
   forgotPasswordChangeSchema,
   socialsBind,
+  googleAuthSchema,
 } = require("./user.joiSchema");
 
 module.exports = {
@@ -24,4 +25,5 @@ module.exports = {
   forgotPasswordReqSchema,
   forgotPasswordChangeSchema,
   socialsBind,
+  googleAuthSchema,
 };
