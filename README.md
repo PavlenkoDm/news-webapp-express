@@ -23,6 +23,7 @@ work with the Mongo database in which user activity with news is stored.
 - controllers/ - folder with controllers files.
 - configs/ - folder with config files for Redis, session, google strategy.
 - services/ - folder with send email service file.
+- public/ - folder with google verification HTML file.
 
 ## Testing
 

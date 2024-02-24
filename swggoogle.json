@@ -1,0 +1,31 @@
+{
+  "/api/auth/google": {
+    "get": {
+      "tags": ["Auth"],
+      "summary": "Redirect to google",
+      "parameters": [],
+      "description": "# Just redirect to google"
+    }
+  },
+  "/api/auth/google-redirect": {
+    "get": {
+      "tags": ["Auth"],
+      "summary": "Processing data from Google",
+      "parameters": [],
+      "description": "# Processing data from Google",
+      "responses": {
+        "302": {
+          "description": "Successful operation. Redirect to the main page https://news-portal-refactor.vercel.app with tokens in query parameters"
+        },
+        "401": {
+          "description": "Error. User is not authentified",
+          "content": {}
+        },
+        "500": {
+          "description": "Error. Database processing is failed",
+          "content": {}
+        }
+      }
+    }
+  }
+}

@@ -405,6 +405,10 @@
           "404": {
             "description": "Error. User not found",
             "content": {}
+          },
+          "500": {
+            "description": "Error. Sending failed",
+            "content": {}
           }
         }
       }
@@ -415,7 +419,7 @@
         "tags": ["Auth"],
         "summary": "Set new password",
         "parameters": [],
-        "description": "# To set new password\n \nIn headers must be token.",
+        "description": "# To set new password\n \nIn headers must be token. Which comes in a query string",
         "security": [
           {
             "Bearer": []
@@ -459,26 +463,137 @@
       }
     },
 
-    "/api/auth/google": {
-      "get": {
+    "/api/auth/google/auth": {
+      "post": {
         "tags": ["Auth"],
-        "summary": "Redirect to google",
+        "summary": "Sign-in or sign-up with google account",
         "parameters": [],
-        "description": "# Just redirect to google"
+        "description": "# To sign-in or sign-up with google account\n \nIf google account linked to existing user account it will be sign-in. Otherwise it will be sign-up with sign-in.",
+        "requestBody": {
+          "description": "# Body description queries:\n \n**email** - string, user's gmail.\n \n**sub** - string, user's sub from google response.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SignInOrSignUpWithGoogle"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error. Database processing is failed",
+            "content": {}
+          }
+        }
       }
     },
-    "/api/auth/google-redirect": {
-      "get": {
+
+    "/api/auth/:socials/bind": {
+      "patch": {
         "tags": ["Auth"],
-        "summary": "Processing data from Google",
-        "parameters": [],
-        "description": "# Processing data from Google",
+        "summary": "Bind socials account",
+        "parameters": [
+          {
+            "name": "socials",
+            "in": "path",
+            "description": "google or facebook or apple",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "/api/auth/google/bind"
+            }
+          }
+        ],
+        "description": "# To bind google/facebook/apple account to existing user account\n \nTo have an opportunity to sign-in with socials.",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "requestBody": {
+          "description": "# Body description queries:\n \n**email** - string, user's email linked to socials.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BindSocialsRequest"
+              }
+            }
+          }
+        },
         "responses": {
-          "302": {
-            "description": "Successful operation. Redirect to the main page https://news-portal-refactor.vercel.app with tokens in query parameters"
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BindSocialsResponse"
+                }
+              }
+            }
           },
-          "401": {
-            "description": "Error. User is not authentified",
+          "400": {
+            "description": "Error. URL param is not valid",
+            "content": {}
+          },
+          "409": {
+            "description": "Error. Email already in use",
+            "content": {}
+          },
+          "500": {
+            "description": "Error. Database processing is failed",
+            "content": {}
+          }
+        }
+      }
+    },
+
+    "/api/auth/:socials/unbind": {
+      "patch": {
+        "tags": ["Auth"],
+        "summary": "Unbind socials account",
+        "parameters": [
+          {
+            "name": "socials",
+            "in": "path",
+            "description": "google or facebook or apple",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "/api/auth/google/bind"
+            }
+          }
+        ],
+        "description": "# To unbind google/facebook/apple account from existing user account\n \nTo reject an opportunity to sign-in with socials.",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnBindSocialsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error. URL param is not valid",
             "content": {}
           },
           "500": {
@@ -857,6 +972,23 @@
           "refreshToken": {
             "type": "string",
             "description": "User's refresh token"
+          },
+          "haveAccounts": {
+            "type": "object",
+            "properties": {
+              "google": {
+                "type": "boolean",
+                "example": "true"
+              },
+              "facebook": {
+                "type": "boolean",
+                "example": "false"
+              },
+              "apple": {
+                "type": "boolean",
+                "example": "false"
+              }
+            }
           }
         }
       },
@@ -1081,7 +1213,7 @@
           },
           "message": {
             "type": "string",
-            "example": "User sign-in success"
+            "example": "Password has successfully changed"
           },
           "user": {
             "type": "object",
@@ -1114,6 +1246,111 @@
           "refreshToken": {
             "type": "string",
             "description": "User's refresh token"
+          },
+          "haveAccounts": {
+            "type": "object",
+            "properties": {
+              "google": {
+                "type": "boolean",
+                "example": "true"
+              },
+              "facebook": {
+                "type": "boolean",
+                "example": "false"
+              },
+              "apple": {
+                "type": "boolean",
+                "example": "false"
+              }
+            }
+          }
+        }
+      },
+
+      "SignInOrSignUpWithGoogle": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's gmail",
+            "example": "joonsnow@gmail.com"
+          },
+          "sub": {
+            "type": "string",
+            "description": "User's sub",
+            "example": "76549873213213878654"
+          }
+        }
+      },
+
+      "BindSocialsRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's gmail",
+            "example": "joonsnow@gmail.com"
+          }
+        }
+      },
+      "BindSocialsResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "http",
+            "example": "200"
+          },
+          "message": {
+            "type": "string",
+            "example": "Account google linking successful"
+          },
+          "haveAccounts": {
+            "type": "object",
+            "properties": {
+              "google": {
+                "type": "boolean",
+                "example": "true"
+              },
+              "facebook": {
+                "type": "boolean",
+                "example": "false"
+              },
+              "apple": {
+                "type": "boolean",
+                "example": "false"
+              }
+            }
+          }
+        }
+      },
+
+      "UnBindSocialsResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "http",
+            "example": "200"
+          },
+          "message": {
+            "type": "string",
+            "example": "Account google unlinking successful"
+          },
+          "haveAccounts": {
+            "type": "object",
+            "properties": {
+              "google": {
+                "type": "boolean",
+                "example": "false"
+              },
+              "facebook": {
+                "type": "boolean",
+                "example": "false"
+              },
+              "apple": {
+                "type": "boolean",
+                "example": "false"
+              }
+            }
           }
         }
       },
