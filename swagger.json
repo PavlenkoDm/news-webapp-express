@@ -1071,6 +1071,23 @@
             "type": "string",
             "description": "User's theme",
             "example": "dark"
+          },
+          "haveAccounts": {
+            "type": "object",
+            "properties": {
+              "google": {
+                "type": "boolean",
+                "example": "true"
+              },
+              "facebook": {
+                "type": "boolean",
+                "example": "false"
+              },
+              "apple": {
+                "type": "boolean",
+                "example": "false"
+              }
+            }
           }
         }
       },

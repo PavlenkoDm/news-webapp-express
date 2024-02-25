@@ -1,5 +1,5 @@
 const { User } = require("../../models");
-const { httpError, sanifyTokenCollection } = require("../../helpers");
+const { httpError, sanifyTokenCollection, transformToBool } = require("../../helpers");
 
 const getCurrentUser = async (req, res) => {
   const { _id: id } = req.user;
@@ -12,6 +12,8 @@ const getCurrentUser = async (req, res) => {
 
   const { name, email, userTheme } = user;
 
+  const haveAccounts = transformToBool(user);
+
   res.status(200);
   res.json({
     code: 200,
@@ -22,6 +24,7 @@ const getCurrentUser = async (req, res) => {
       email,
     },
     userTheme,
+    haveAccounts,
   });
 };
 
