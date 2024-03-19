@@ -85,7 +85,6 @@ const googleAuth = async (req, res) => {
       name: email.slice(0, email.indexOf("@")),
       email,
       password: hashPassword,
-      haveAccounts: { google: email },
     });
     if (!userNew) {
       dbFailure();
