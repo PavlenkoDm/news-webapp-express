@@ -11,8 +11,15 @@ const updateUserEmail = async (req, res) => {
   // if (!user) {
   //   throw httpError(404, "User not found");
   // }
-  const emailInBase = await User.findOne({ email: updatedEmail });
-  if (user.email === updatedEmail || emailInBase.email === updatedEmail) {
+  const emailInBase = await User.findOne({
+    $or: [
+      { email: updatedEmail },
+      { "haveAccounts.google": updatedEmail },
+      { "haveAccounts.facebook": updatedEmail },
+      { "haveAccounts.apple": updatedEmail },
+    ],
+  });
+  if (user.email === updatedEmail || emailInBase) {
     throw httpError(409, "Email already in use");
   }
 
