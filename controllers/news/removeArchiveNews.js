@@ -29,17 +29,17 @@ const removeArchiveNews = async (req, res) => {
     return;
   }
 
-  await redisSetData(`Cached archive news ${userId}`, data);
+  // await redisSetData(`Cached archive news ${userId}`, data);
 
-  const newsLogCache = await clientRedis.exists(`Cached news history log ${userId}`);
-  if (newsLogCache) {
-    const data = await NewsHistoryLog.find(
-      { newsOwner: userId },
-      "-createdAt -updatedAt -newsOwner"
-    );
-    if (!data) dbFailure();
-    await redisSetData(`Cached news history log ${userId}`, data);
-  }
+  // const newsLogCache = await clientRedis.exists(`Cached news history log ${userId}`);
+  // if (newsLogCache) {
+  //   const data = await NewsHistoryLog.find(
+  //     { newsOwner: userId },
+  //     "-createdAt -updatedAt -newsOwner"
+  //   );
+  //   if (!data) dbFailure();
+  //   await redisSetData(`Cached news history log ${userId}`, data);
+  // }
 
   res.json({
     code: 200,

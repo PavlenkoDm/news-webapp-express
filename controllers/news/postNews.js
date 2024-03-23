@@ -21,13 +21,13 @@ const postNews = async (req, res) => {
 
   const modifiedPostedNews = modifyDBResponse(postedNews);
 
-  const allNews = req.body.filter(({ isFavourite, hasRead }) => isFavourite || hasRead);
-  const favouriteNews = req.body.filter(({ isFavourite }) => isFavourite);
-  const readNews = req.body.filter(({ hasRead }) => hasRead);
+  // const allNews = req.body.filter(({ isFavourite, hasRead }) => isFavourite || hasRead);
+  // const favouriteNews = req.body.filter(({ isFavourite }) => isFavourite);
+  // const readNews = req.body.filter(({ hasRead }) => hasRead);
 
-  await redisSetData(`Cached all news ${id}`, allNews);
-  await redisSetData(`Cached favourite news ${id}`, favouriteNews);
-  await redisSetData(`Cached has read news ${id}`, readNews);
+  // await redisSetData(`Cached all news ${id}`, allNews);
+  // await redisSetData(`Cached favourite news ${id}`, favouriteNews);
+  // await redisSetData(`Cached has read news ${id}`, readNews);
 
   res.status(201);
   res.json({
