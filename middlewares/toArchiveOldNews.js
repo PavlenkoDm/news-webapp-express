@@ -70,12 +70,12 @@ const toArchiveOldNews = async (req, res, next) => {
     if (!removedNews) dbFailure();
   }
 
-  const archiveCache = await clientRedis.exists(`Cached archive news ${id}`);
-  if (archiveCache) {
-    const data = await Archive.find({ newsOwner: id }, "-createdAt -updatedAt -newsOwner");
-    if (!data) dbFailure();
-    await redisSetData(`Cached archive news ${id}`, data);
-  }
+  // const archiveCache = await clientRedis.exists(`Cached archive news ${id}`);
+  // if (archiveCache) {
+  //   const data = await Archive.find({ newsOwner: id }, "-createdAt -updatedAt -newsOwner");
+  //   if (!data) dbFailure();
+  //   await redisSetData(`Cached archive news ${id}`, data);
+  // }
 
   next();
 };
