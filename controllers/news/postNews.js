@@ -13,7 +13,9 @@ const postNews = async (req, res) => {
     return { ...element, newsOwner: id };
   });
 
-  const postedNews = await News.insertMany(newReqBody);
+  const newReqBodyFiltered = newReqBody.filter(({ additionDate }) => additionDate);
+
+  const postedNews = await News.insertMany(newReqBodyFiltered);
   if (!postedNews) {
     dbFailure();
     return;
