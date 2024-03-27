@@ -33,6 +33,12 @@ app.use("/api/link", (req, res) => {
   res.sendFile(path.join(__dirname, "./public/index.html"));
 }); // Temp to del
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use("/api/service", (req, res) => {
+  res.status(200).json({
+    code: 200,
+    message: "Status OK. Keep working...",
+  });
+});
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });
