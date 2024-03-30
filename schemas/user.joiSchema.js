@@ -11,6 +11,11 @@ const signUpSchema = Joi.object({
 const signInSchema = Joi.object({
   email: Joi.string().pattern(emailRegexp).required(),
   password: Joi.string().required(),
+  cryptoData: Joi.object({
+    userId: Joi.string(),
+    encryptedPassword: Joi.binary(),
+    salt: Joi.binary(),
+  }),
 });
 
 const refreshUserSchema = Joi.object({

@@ -4,6 +4,26 @@ const handleMongooseError = require("../middlewares/handleMongooseError");
 
 const themeList = ["light", "dark"];
 
+const arrayBufferSchemaType = {
+  type: Buffer,
+  get: data => {
+    return new Uint8Array(data).buffer;
+  },
+  set: data => {
+    return Buffer.from(data);
+  },
+};
+
+const uint8ArraySchemaType = {
+  type: Buffer,
+  get: function (data) {
+    return new Uint8Array(data);
+  },
+  set: function (uint8Array) {
+    return Buffer.from(uint8Array);
+  },
+};
+
 const userSchema = new Schema(
   {
     email: {
@@ -42,6 +62,11 @@ const userSchema = new Schema(
         type: String,
         default: "",
       },
+    },
+    cryptoData: {
+      userId: String,
+      encryptedPassword: arrayBufferSchemaType,
+      salt: uint8ArraySchemaType,
     },
   },
   { versionKey: false, timestamps: true }

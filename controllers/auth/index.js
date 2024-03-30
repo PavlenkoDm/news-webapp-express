@@ -12,6 +12,7 @@ const { forgotPasswordChange } = require("./forgotPasswordChange");
 const { socialsAccBind } = require("./socialsAccBind");
 const { socialsAccUnbind } = require("./socialsAccUnbind");
 const { googleAuth } = require("./googleAuth");
+const { getCryptoData } = require("./getCryptoData");
 
 module.exports = {
   signUpUser,
@@ -28,4 +29,5 @@ module.exports = {
   socialsAccBind,
   socialsAccUnbind,
   googleAuth,
+  getCryptoData,
 };
