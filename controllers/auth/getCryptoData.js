@@ -8,15 +8,16 @@ const getCryptoData = async (req, res) => {
     throw httpError(404, "User not found");
   }
 
-  const { email, cryptoData } = user;
+  const { email, cryptoData: crData } = user;
 
   res.status(200);
   res.json({
     code: 200,
     message: "Your saved password has been successfully retrieved",
-    encryptedData: {
+    cryptoData: {
       email,
-      cryptoData,
+      encryptedPassword: crData.encryptedPassword,
+      salt: crData.salt,
     },
   });
 };
