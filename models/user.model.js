@@ -6,10 +6,10 @@ const themeList = ["light", "dark"];
 
 const arrayBufferSchemaType = {
   type: Buffer,
-  get: data => {
+  get: function (data) {
     return new Uint8Array(data).buffer;
   },
-  set: data => {
+  set: function (data) {
     return Buffer.from(data);
   },
 };
@@ -67,6 +67,11 @@ const userSchema = new Schema(
       userId: String,
       encryptedPassword: arrayBufferSchemaType,
       salt: uint8ArraySchemaType,
+      exportedCryptoKey: arrayBufferSchemaType,
+    },
+    thirdPartyRegister: {
+      type: Boolean,
+      default: false,
     },
   },
   { versionKey: false, timestamps: true }

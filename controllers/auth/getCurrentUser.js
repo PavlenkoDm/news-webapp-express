@@ -10,7 +10,7 @@ const getCurrentUser = async (req, res) => {
 
   await sanifyTokenCollection(user);
 
-  const { name, email, userTheme } = user;
+  const { name, email, userTheme, thirdPartyRegister } = user;
 
   const haveAccounts = transformToBool(user);
 
@@ -25,6 +25,7 @@ const getCurrentUser = async (req, res) => {
     },
     userTheme,
     haveAccounts,
+    thirdPartyRegister,
   });
 };
 

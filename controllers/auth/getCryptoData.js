@@ -18,6 +18,7 @@ const getCryptoData = async (req, res) => {
       email,
       encryptedPassword: crData.encryptedPassword,
       salt: crData.salt,
+      exportedCryptoKey: crData.exportedCryptoKey,
     },
   });
 };

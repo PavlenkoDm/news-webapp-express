@@ -17,7 +17,10 @@ const googleAuth = async (req, res) => {
         const expirationTime = new Date(decoded.exp * 1000);
         return expirationTime > currentDate;
       });
-      await User.findByIdAndUpdate(existingUser._id, { accessToken: validAccessTokens });
+      await User.findByIdAndUpdate(existingUser._id, {
+        accessToken: validAccessTokens,
+        thirdPartyRegister: true,
+      });
     }
 
     const { generatedAccessToken, generatedRefreshToken } = generateAccessRefreshTokens(
@@ -77,6 +80,7 @@ const googleAuth = async (req, res) => {
       accessToken: generatedAccessToken,
       refreshToken: generatedRefreshToken,
       haveAccounts,
+      thirdPartyRegister: existingUserWithToken.thirdPartyRegister,
     });
   } else {
     const hashPassword = await bcrypt.hash(sub, 10);
@@ -85,6 +89,7 @@ const googleAuth = async (req, res) => {
       name: email.slice(0, email.indexOf("@")),
       email,
       password: hashPassword,
+      thirdPartyRegister: true,
     });
     if (!userNew) {
       dbFailure();
@@ -126,6 +131,7 @@ const googleAuth = async (req, res) => {
       accessToken: generatedAccessToken,
       refreshToken: generatedRefreshToken,
       haveAccounts,
+      thirdPartyRegister: userNewWithToken.thirdPartyRegister,
     });
   }
 };
