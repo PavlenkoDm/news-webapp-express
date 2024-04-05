@@ -3,12 +3,20 @@ const { httpError, dbFailure } = require("../../helpers");
 
 const signOutUser = async (req, res) => {
   const { _id } = req.user;
-  const user = await User.findByIdAndUpdate(_id, { accessToken: [] }, { new: true });
+  const user = await User.findByIdAndUpdate(
+    _id,
+    { $pull: { accessToken: req.token } },
+    { new: true }
+  );
   if (!user) {
     throw httpError(401, "User is not authorized");
   }
 
-  const removedUserFromRefresh = await RefreshToken.findOneAndRemove({ userEmail: user.email });
+  const removedUserFromRefresh = await RefreshToken.findOneAndUpdate(
+    { userEmail: user.email },
+    { $pull: { refreshToken: req.cookies.rftoken } },
+    { new: true }
+  );
   if (!removedUserFromRefresh) {
     dbFailure();
   }
