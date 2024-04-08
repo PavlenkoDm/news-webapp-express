@@ -13,9 +13,9 @@ const signInSchema = Joi.object({
   password: Joi.string().required(),
   cryptoData: Joi.object({
     userId: Joi.string(),
-    encryptedPassword: Joi.binary(),
-    salt: Joi.binary(),
-    exportedCryptoKey: Joi.binary(),
+    encryptedPassword: Joi.binary().label("JOI Encrypted Password"),
+    salt: Joi.binary().label("JOI Salt"),
+    exportedCryptoKey: Joi.binary().label("JOI Exported Crypto Key"),
   }),
 });
 
