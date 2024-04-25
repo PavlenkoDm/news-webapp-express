@@ -11,12 +11,14 @@ const signUpSchema = Joi.object({
 const signInSchema = Joi.object({
   email: Joi.string().pattern(emailRegexp).required(),
   password: Joi.string().required(),
-  cryptoData: Joi.object({
-    userId: Joi.string(),
-    encryptedPassword: Joi.binary().label("JOI Encrypted Password"),
-    salt: Joi.binary().label("JOI Salt"),
-    exportedCryptoKey: Joi.binary().label("JOI Exported Crypto Key"),
-  }),
+  cryptoData: Joi.object()
+    .keys({
+      userId: Joi.string().required(),
+      encryptedPassword: Joi.string().label("JOI Encrypted Password").required(),
+      salt: Joi.string().label("JOI Salt").required(),
+      exportedCryptoKey: Joi.string().label("JOI Exported Crypto Key").required(),
+    })
+    .optional(),
 });
 
 const refreshUserSchema = Joi.object({

@@ -4,25 +4,25 @@ const handleMongooseError = require("../middlewares/handleMongooseError");
 
 const themeList = ["light", "dark"];
 
-const arrayBufferSchemaType = {
-  type: Buffer,
-  get: function (data) {
-    return new Uint8Array(data).buffer;
-  },
-  set: function (data) {
-    return Buffer.from(data);
-  },
-};
+// const arrayBufferSchemaType = {
+//   type: Buffer,
+//   get: function (data) {
+//     return new Uint8Array(data).buffer;
+//   },
+//   set: function (data) {
+//     return Buffer.from(data);
+//   },
+// };
 
-const uint8ArraySchemaType = {
-  type: Buffer,
-  get: function (data) {
-    return new Uint8Array(data);
-  },
-  set: function (uint8Array) {
-    return Buffer.from(uint8Array);
-  },
-};
+// const uint8ArraySchemaType = {
+//   type: Buffer,
+//   get: function (data) {
+//     return new Uint8Array(data);
+//   },
+//   set: function (uint8Array) {
+//     return Buffer.from(uint8Array);
+//   },
+// };
 
 const userSchema = new Schema(
   {
@@ -64,10 +64,22 @@ const userSchema = new Schema(
       },
     },
     cryptoData: {
-      userId: String,
-      encryptedPassword: arrayBufferSchemaType,
-      salt: uint8ArraySchemaType,
-      exportedCryptoKey: arrayBufferSchemaType,
+      userId: {
+        type: String,
+        default: "",
+      },
+      encryptedPassword: {
+        type: String,
+        default: "",
+      },
+      salt: {
+        type: String,
+        default: "",
+      },
+      exportedCryptoKey: {
+        type: String,
+        default: "",
+      },
     },
     thirdPartyRegister: {
       type: Boolean,

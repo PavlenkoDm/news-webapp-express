@@ -10,7 +10,7 @@ const {
 } = require("../../helpers");
 
 const signInUser = async (req, res) => {
-  const { email, password, changePassword } = req.body;
+  const { email, password, changePassword, cryptoData } = req.body;
   if (!password || !email) {
     throw httpError(400, "All sign-in fields are required");
   }
@@ -37,9 +37,16 @@ const signInUser = async (req, res) => {
 
   const { generatedAccessToken, generatedRefreshToken } = generateAccessRefreshTokens(user._id);
 
+  const updQuery = { $push: { accessToken: generatedAccessToken } };
+
+  if (cryptoData) {
+    updQuery.$set = { cryptoData };
+  }
+
   const userWithToken = await User.findByIdAndUpdate(
     user._id,
-    { $push: { accessToken: generatedAccessToken } },
+    updQuery,
+    // { $push: { accessToken: generatedAccessToken } },
     { new: true }
   );
   if (!userWithToken) {
