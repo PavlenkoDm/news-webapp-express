@@ -118,6 +118,6 @@ router.patch("/:socials/unbind", auth, controllerWrapper(socialsAccUnbind));
 
 router.post("/google/auth", validateReqBody(googleAuthSchema), controllerWrapper(googleAuth));
 
-router.get("/get-password", controllerWrapper(getCryptoData));
+router.post("/get-password", controllerWrapper(getCryptoData));
 
 module.exports = router;
