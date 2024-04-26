@@ -15,7 +15,7 @@ const getCryptoData = async (req, res) => {
   } = user;
 
   if (!encryptedPassword || !salt || !exportedCryptoKey) {
-    throw httpError(404, "Crypto data not found");
+    throw httpError(404, `Crypto data not found ${userId}`);
   }
 
   res.status(200);
