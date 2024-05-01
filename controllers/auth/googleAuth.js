@@ -19,7 +19,6 @@ const googleAuth = async (req, res) => {
       });
       await User.findByIdAndUpdate(existingUser._id, {
         accessToken: validAccessTokens,
-        thirdPartyRegister: true,
       });
     }
 
@@ -116,7 +115,7 @@ const googleAuth = async (req, res) => {
       dbFailure();
     }
 
-    const haveAccounts = transformToBool(userNewWithToken);
+    // const haveAccounts = transformToBool(userNewWithToken);
 
     res.status(200);
     res.json({
@@ -130,7 +129,7 @@ const googleAuth = async (req, res) => {
       userTheme: userNewWithToken.userTheme,
       accessToken: generatedAccessToken,
       refreshToken: generatedRefreshToken,
-      haveAccounts,
+      // haveAccounts,
       thirdPartyRegister: userNewWithToken.thirdPartyRegister,
     });
   }
