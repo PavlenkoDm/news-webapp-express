@@ -1,8 +1,12 @@
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
 
 const { User, RefreshToken } = require("../../models");
-const { dbFailure, generateAccessRefreshTokens, transformToBool } = require("../../helpers");
+const {
+  dbFailure,
+  generateAccessRefreshTokens,
+  transformToBool,
+  sanifyTokenCollection,
+} = require("../../helpers");
 
 const googleAuth = async (req, res) => {
   const { email, sub } = req.body;
@@ -10,17 +14,7 @@ const googleAuth = async (req, res) => {
   const existingUser = await User.findOne({ "haveAccounts.google": email });
 
   if (existingUser) {
-    if (existingUser.accessToken.length !== 0) {
-      const currentDate = Date.now();
-      const validAccessTokens = existingUser.accessToken.filter(token => {
-        const decoded = jwt.decode(token);
-        const expirationTime = new Date(decoded.exp * 1000);
-        return expirationTime > currentDate;
-      });
-      await User.findByIdAndUpdate(existingUser._id, {
-        accessToken: validAccessTokens,
-      });
-    }
+    await sanifyTokenCollection(existingUser);
 
     const { generatedAccessToken, generatedRefreshToken } = generateAccessRefreshTokens(
       existingUser._id
@@ -48,19 +42,12 @@ const googleAuth = async (req, res) => {
         dbFailure();
       }
     } else {
-      const currentDate = Date.now();
-
-      const validRefreshTokens = existingUserInRefresh.refreshToken.filter(token => {
-        const decoded = jwt.decode(token);
-        const expirationTime = new Date(decoded.exp * 1000);
-        return expirationTime > currentDate;
-      });
-
-      validRefreshTokens.push(generatedRefreshToken);
+      await sanifyTokenCollection(existingUserInRefresh);
 
       await RefreshToken.findOneAndUpdate(
         { userEmail: existingUserWithToken.email },
-        { refreshToken: validRefreshTokens }
+        { $push: { refreshToken: generatedRefreshToken } },
+        { new: true }
       );
     }
 
@@ -82,24 +69,32 @@ const googleAuth = async (req, res) => {
       thirdPartyRegister: existingUserWithToken.thirdPartyRegister,
     });
   } else {
-    const hashPassword = await bcrypt.hash(sub, 10);
+    let googleRegedUser;
 
-    const userNew = await User.create({
-      name: email.slice(0, email.indexOf("@")),
-      email,
-      password: hashPassword,
-      thirdPartyRegister: true,
-    });
-    if (!userNew) {
-      dbFailure();
+    const existingGoogleRegUser = await User.findOne({ email });
+
+    if (!existingGoogleRegUser) {
+      const hashPassword = await bcrypt.hash(sub, 10);
+      googleRegedUser = await User.create({
+        name: email.slice(0, email.indexOf("@")),
+        email,
+        password: hashPassword,
+        thirdPartyRegister: true,
+      });
+      if (!googleRegedUser) {
+        dbFailure();
+      }
+    } else {
+      googleRegedUser = existingGoogleRegUser;
+      await sanifyTokenCollection(googleRegedUser);
     }
 
     const { generatedAccessToken, generatedRefreshToken } = generateAccessRefreshTokens(
-      userNew._id
+      googleRegedUser._id
     );
 
     const userNewWithToken = await User.findByIdAndUpdate(
-      userNew._id,
+      googleRegedUser._id,
       { $push: { accessToken: generatedAccessToken } },
       { new: true }
     );
@@ -107,12 +102,24 @@ const googleAuth = async (req, res) => {
       dbFailure();
     }
 
-    const userNewInRefresh = await RefreshToken.create({
+    const existingUserInRefresh = await RefreshToken.findOne({
       userEmail: userNewWithToken.email,
-      refreshToken: [generatedRefreshToken],
     });
-    if (!userNewInRefresh) {
-      dbFailure();
+    if (!existingUserInRefresh) {
+      const userNewInRefresh = await RefreshToken.create({
+        userEmail: userNewWithToken.email,
+        refreshToken: [generatedRefreshToken],
+      });
+      if (!userNewInRefresh) {
+        dbFailure();
+      }
+    } else {
+      await sanifyTokenCollection(existingUserInRefresh);
+      await RefreshToken.findOneAndUpdate(
+        { userEmail: userNewWithToken.email },
+        { $push: { refreshToken: generatedRefreshToken } },
+        { new: true }
+      );
     }
 
     // const haveAccounts = transformToBool(userNewWithToken);
