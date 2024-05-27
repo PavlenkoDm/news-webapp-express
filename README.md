@@ -5,6 +5,10 @@ news-webapp-express
 This web server is the backend for the news portal. It provides user authentication functionality,
 work with the Mongo database in which user activity with news is stored.
 
+## Link to swagger documentation
+
+https://news-webapp-express.onrender.com/api-docs/
+
 ## Installation
 
 1. Install Node.js (if not installed).
@@ -31,4 +35,4 @@ In progress.
 
 ## Contact Information
 
-email: dmpavlenko07@gmail.com
+email: dmpavlenko07@gmail.com telegram: @Pavlenko_Dm

@@ -23,7 +23,7 @@ const {
   signOutUser,
   refreshUser,
   getCurrentUser,
-  googleRedirect,
+  /* googleRedirect, */
   updateUserEmail,
   updateUserPassword,
   updateUserTheme,
@@ -60,17 +60,17 @@ router.post(
   controllerWrapper(refreshUser)
 );
 
-router.get(
-  "/google",
-  passport.authenticate("google", {
-    scope: ["profile", "email"],
-  })
-);
-router.get(
-  "/google-redirect",
-  passport.authenticate("google", { failureRedirect: "https://news-portal-refactor.vercel.app" }),
-  controllerWrapper(googleRedirect)
-);
+// router.get(
+//   "/google",
+//   passport.authenticate("google", {
+//     scope: ["profile", "email"],
+//   })
+// );
+// router.get(
+//   "/google-redirect",
+//   passport.authenticate("google", { failureRedirect: "https://news-portal-refactor.vercel.app" }),
+//   controllerWrapper(googleRedirect)
+// );
 
 router.patch(
   "/update-email",

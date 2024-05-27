@@ -6,7 +6,6 @@ const { GOOGLE_SEND_EMAIL_CLIENT_ID, GOOGLE_SEND_EMAIL_CLIENT_SECRET, GOOGLE_SEN
   process.env;
 const REDIRECT_URI = "https://developers.google.com/oauthplayground";
 const BASE_URL_FRONTEND = "http://localhost:5173"; // "https://news-portal-refactor.vercel.app";
-// "http://localhost:5173"
 
 const oAuth2Client = new google.auth.OAuth2(
   GOOGLE_SEND_EMAIL_CLIENT_ID,

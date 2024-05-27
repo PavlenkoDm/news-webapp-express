@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 
 const { User } = require("../../models");
 const { httpError } = require("../../helpers");
-const { sendMail } = require("../../services");
+const { sendSgEmail } = require("../../services"); /* sendMail */
 
 const { JWT_SECRET } = process.env;
 
@@ -17,7 +17,8 @@ const forgotPasswordReq = async (req, res) => {
 
   const generatedToken = jwt.sign(payload, JWT_SECRET, { expiresIn: "23h" });
 
-  await sendMail(email, generatedToken);
+  // await sendMail(email, generatedToken);
+  await sendSgEmail(email, generatedToken);
   res.status(200);
   res.json({
     code: 200,

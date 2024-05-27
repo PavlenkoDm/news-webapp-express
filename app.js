@@ -1,6 +1,6 @@
 const express = require("express");
 const session = require("express-session");
-const path = require("path");
+// const path = require("path");
 const logger = require("morgan");
 const cors = require("cors");
 const passport = require("passport");
@@ -31,9 +31,9 @@ app.use((req, res, next) => {
 
 app.use("/api/news", newsRouter);
 app.use("/api/auth", authRouter);
-app.use("/api/link", (req, res) => {
-  res.sendFile(path.join(__dirname, "./public/index.html"));
-}); // Temp to del
+// app.use("/api/link", (req, res) => {
+//   res.sendFile(path.join(__dirname, "./public/index.html"));
+// });
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use((req, res) => {

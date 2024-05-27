@@ -33,7 +33,6 @@ router.get(
   toArchiveOldNews,
   controllerWrapper(getFavouriteNews)
 );
-// router.post("/favourite", validateReqBody(addNewsSchema), controllerWrapper(postFavouriteNews));
 
 router.get(
   "/read",
@@ -42,7 +41,6 @@ router.get(
   toArchiveOldNews,
   controllerWrapper(getHasReadNews)
 );
-// router.post("/read", validateReqBody(addNewsSchema), controllerWrapper(postHasReadNews));
 
 router.get("/archive", auth, controllerWrapper(getArchiveNews));
 router.delete("/archive/:id", auth, controllerWrapper(removeArchiveNews));
