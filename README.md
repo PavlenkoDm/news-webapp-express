@@ -11,10 +11,19 @@ https://news-webapp-express.onrender.com/api-docs/
 
 ## Installation
 
-1. Install Node.js (if not installed).
+1. Install [Node.js](https://nodejs.org/) v14+ (if not installed).
 2. Clone the repository to your computer.
-3. Install the dependencies using the npm install command.
-4. Start the application using the npm start command.
+3. Install the dependencies using
+
+```sh
+npm install
+```
+
+4. Start the application using
+
+```sh
+npm start
+```
 
 ## Project structure
 
